@@ -7,7 +7,7 @@
 * 55160 - Corbella, Leonardo Gabriel
 
 ### Repositorios
-* [fullstack app](https://github.com/ggiuliana/DSW-tp](https://github.com/ggiuliana/DSW-tp)
+* [fullstack app] https://github.com/ggiuliana/DSW-tp
 
 ## Tema
 ### Descripción
