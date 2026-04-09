@@ -2,51 +2,38 @@
 
 ## Grupo
 ### Integrantes
-* legajo - Apellido(s), Nombre(s)
+* 54280 - Squarzon, Nicolás José
+* 54448 - Grieco, Giuliana
+* 55160 - Corbella, Leonardo Gabriel
 
 ### Repositorios
-* [frontend app](http://hyperlinkToGihubOrGitlab)
-* [backend app](http://hyperlinkToGihubOrGitlab)
-*Nota*: si utiliza un monorepo indicar un solo link con fullstack app.
+* [fullstack app]([http://hyperlinkToGihubOrGitlab](https://github.com/ggiuliana/DSW-tp](https://github.com/ggiuliana/DSW-tp))
 
 ## Tema
 ### Descripción
-*2 a 6 líneas describiendo el negocio (menos es más)*
+El sistema está orientado a una veterinaria, en donde existen 3 tipos de usuario: el Dueño de la mascota, el Veterinario y el Administrador del sistema. El dueño puede sacar un turno para su mascota en la agenda virtual para una fecha y hora disponibles para un veterinario dado. El veterinario, luego de haberse completado el turno, completa la resolución del mismo, con su diagnóstico, los estudios realizados y otros detalles. El Dueño de la mascota puede cancelar o modificar el turno antes de llegado el momento del mismo.
+Además, la veterinaria posee un control de stock de los medicamentos a los que se les administra a las mascotas atendidas. Al quedar pocas unidades de un medicamento, el sistema lo detecta y realiza automáticamente un pedido de reposición al proovedor designado para ese medicamento.
 
 ### Modelo
-![imagen del modelo]()
-
-*Nota*: incluir un link con la imagen de un modelo, puede ser modelo de dominio, diagrama de clases, DER. Si lo prefieren pueden utilizar diagramas con [Mermaid](https://mermaid.js.org) en lugar de imágenes.
+![modeloVet](https://github.com/user-attachments/assets/ecd1134f-3db9-4444-94e8-944136cdb814)
 
 ## Alcance Funcional 
 
 ### Alcance Mínimo
 
-*Nota*: el siguiente es un ejemplo para un grupo de 3 integrantes para un sistema de hotel. El 
 
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Tipo Habitacion<br>2. CRUD Servicio<br>3. CRUD Localidad|
-|CRUD dependiente|1. CRUD Habitación {depende de} CRUD Tipo Habitacion<br>2. CRUD Cliente {depende de} CRUD Localidad|
-|Listado<br>+<br>detalle| 1. Listado de habitaciones filtrado por tipo de habitación, muestra nro y tipo de habitación => detalle CRUD Habitacion<br> 2. Listado de reservas filtrado por rango de fecha, muestra nro de habitación, fecha inicio y fin estadía, estado y nombre del cliente => detalle muestra datos completos de la reserva y del cliente|
-|CUU/Epic|1. Reservar una habitación para la estadía<br>2. Realizar el check-in de una reserva|
+|CRUD simple|1. CRUD Veterinario<br>2. CRUD Dueño<br>3. CRUD Tipo Vacuna<br>4. CRUD Estudio|
+|CRUD dependiente|1. CRUD Mascota {depende de} CRUD Dueño<br>2. CRUD Vacuna {depende de} CRUD Tipo Vacuna|
+|Listado<br>+<br>detalle| 1. Listado de historia clínica por mascota, con detalle de estudios y vacunas realizadas al animal<br> 2. Listado de turnos otorgados por veterinario en un rango de fechas determinado.
+|CUU/Epic|1. Agendar turno con recordatorio<br>2. Registrar resolución de turno junto a los estudios realizados|
 
 
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD |1. CRUD Tipo Habitacion<br>2. CRUD Servicio<br>3. CRUD Localidad<br>4. CRUD Provincia<br>5. CRUD Habitación<br>6. CRUD Empleado<br>7. CRUD Cliente|
-|CUU/Epic|1. Reservar una habitación para la estadía<br>2. Realizar el check-in de una reserva<br>3. Realizar el check-out y facturación de estadía y servicios|
-
-
-### Alcance Adicional Voluntario
-
-*Nota*: El Alcance Adicional Voluntario es opcional, pero ayuda a que la funcionalidad del sistema esté completa y será considerado en la nota en función de su complejidad y esfuerzo.
-
-|Req|Detalle|
-|:-|:-|
-|Listados |1. Estadía del día filtrado por fecha muestra, cliente, habitaciones y estado <br>2. Reservas filtradas por cliente muestra datos del cliente y de cada reserve fechas, estado cantidad de habitaciones y huespedes|
-|CUU/Epic|1. Consumir servicios<br>2. Cancelación de reserva|
-|Otros|1. Envío de recordatorio de reserva por email|
+|CRUD |1. CRUD Veterinario<br>2. CRUD Dueño<br>3. CRUD Tipo Vacuna<br>4. CRUD Vacuna<br>5. CRUD Estudio<br>6. CRUD Medicamento<br>7. CRUD Proveedor|
+|CUU/Epic|1. Agendar turno con recordatorio<br>2. Registrar resolución de turno junto a los estudios realizados<br>3. Realizar pedido automático de medicamentos con poco o sin stock a proovedor|
 
