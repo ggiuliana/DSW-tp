@@ -11,7 +11,7 @@
 
 ## Tema
 ### Descripción
-Aplicación web para la gestión de una veterinaria que reúne la reserva de turnos, el historial clínico y el control de stock de insumos médicos. El sistema optimiza la administración operativa y permite a los usuarios registrar tanto sus perfiles personales como los de sus mascotas.
+Aplicación web para la gestión de una veterinaria que reúne la reserva de turnos, el historial clínico y el control de stock de medicamentos. El sistema optimiza la administración operativa y permite a los usuarios registrar tanto sus perfiles personales como los de sus mascotas.
 ### Modelo
 ![modeloVete](./docs/modeloVete.png)
 
