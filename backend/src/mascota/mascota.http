@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/mascota
+###
+POST http://localhost:3000/api/mascota/duenio/3
+Content-Type: application/json
+
+{
+    "nombre_mascota": "Elvacea",
+    "especie": "Gato",
+    "raza": "Siames",
+    "castrado": true,
+    "sexo": "F",
+    "fechaNac": "2015-01-01"
+}
+###
+GET http://localhost:3000/api/mascota/duenio/3
+
+###
+PATCH http://localhost:3000/api/mascota/1
+Content-Type: application/json
+
+{
+    "especie": "Gato"
+}
+
+###
+
+DELETE http://localhost:3000/api/mascota/1

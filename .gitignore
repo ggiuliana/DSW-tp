@@ -1,0 +1,11 @@
+# Dependencias
+backend/node_modules/
+
+# Archivos compilados
+backend/dist/
+
+# Variables de entorno
+backend/.env
+
+# Logs
+*.log
