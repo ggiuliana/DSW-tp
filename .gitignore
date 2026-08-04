@@ -1,11 +1,22 @@
 # Dependencias
-backend/node_modules/
+node_modules
 
 # Archivos compilados
-backend/dist/
+backend/dist
 
 # Variables de entorno
 backend/.env
 
 # Logs
 *.log
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

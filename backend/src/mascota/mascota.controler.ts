@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Mascota } from './mascota.entity.js'
 import { Duenio } from '../duenio/duenio.entity.js'
+import { Persona } from '../persona/persona.entity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
@@ -31,21 +32,28 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function findByDuenio(req: Request, res: Response) {
-  try {
-    const mascotas = await em.find(Mascota, { 
-      duenio: await em.findOne(Duenio, { id_duenio: parseInt(req.params.id_duenio as string) }) 
-    })
-    res.status(200).json({ message: "Mascotas found", data: mascotas })
-  } catch (error) {
-    res.status(500).json({
-      message: (error as Error).message
+  try{
+    const persona = await em.findOne(Persona, {
+      id_persona: parseInt(req.params.id_duenio as string)
     });
+    if (!persona) {
+      return res.status(404).json({message: "Duenio not found"});
+    }
+    const duenio = await em.findOne(Duenio, {persona: persona});
+    if (!duenio) {
+      return res.status(404).json({message: "Duenio not found"});
+    }
+    const mascotas = await em.find(Mascota, {duenio: duenio});
+    return res.status(200).json({message: "Mascotas found",data: mascotas});
+  }catch(error){
+    return res.status(500).json({message: (error as Error).message});
   }
 }
 
 async function add(req: Request, res: Response) {
-  const id_duenio = parseInt(req.params.id_duenio as string)
-  const duenio = await em.findOne(Duenio, { id_duenio })
+  const duenio = await em.findOne(Duenio, 
+        { persona: await em.findOne(Persona, { id_persona: parseInt(req.params.id_duenio as string) }) 
+      })
   const { nombre_mascota, especie, raza, castrado, sexo, fechaNac } = req.body
   if(!duenio){
     return res.status(404).json({ message: "Duenio not found" })

@@ -1,7 +1,8 @@
 import 'reflect-metadata'
 import express from 'express'
-import { duenioRouter } from './duenio/duenio.routes.js'
+import { personaRouter } from './persona/persona.routes.js'
 import { mascotaRouter } from './mascota/mascota.routes.js'
+import { duenioRouter } from './duenio/duenio.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 
@@ -12,8 +13,9 @@ app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
 })
 
-app.use('/api/duenio', duenioRouter)
+app.use('/api/persona', personaRouter)
 app.use('/api/mascota', mascotaRouter)
+app.use('/api/duenio', duenioRouter)
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })

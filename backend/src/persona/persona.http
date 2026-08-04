@@ -1,0 +1,42 @@
+GET http://localhost:3000/api/persona
+
+### obtener una persona por id
+GET http://localhost:3000/api/persona/1
+
+### crear un nuevo character
+POST http://localhost:3000/api/persona
+Content-Type: application/json
+
+{
+  "nombre": "negrera",
+  "apellido": "warrior",
+  "telefono": "123456789",
+  "mail": "atila@warrior.com",
+  "dni": "12345678",
+  "direccion": "123 Main Street"
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/persona/1
+Content-Type: application/json
+
+{
+  "nombre": "modificado",
+  "apellido": "alalla",
+  "telefono": "123456789",
+  "mail": "anakin@skywalker.com",
+  "dni": "87654321",
+  "direccion": "456 Oak Avenue"
+}
+
+
+### modificar un character (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/duenio/1
+Content-Type: application/json
+
+{
+  "apellido_duenio": "blabla"
+}
+
+### borrar un character
+DELETE http://localhost:3000/api/persona/1

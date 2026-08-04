@@ -24,6 +24,6 @@ export class Mascota {
     @Property()
     fechaNac!: Date
 
-    @ManyToOne(() => Duenio)
-    duenio!: Duenio;
+    @ManyToOne(() => Duenio, {nullable: true, onDelete: 'set null'})
+    duenio?: Duenio;
 }

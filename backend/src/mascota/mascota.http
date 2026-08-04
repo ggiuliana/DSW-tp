@@ -4,7 +4,7 @@ POST http://localhost:3000/api/mascota/duenio/3
 Content-Type: application/json
 
 {
-    "nombre_mascota": "Elvacea",
+    "nombre_mascota": "Gata montes",
     "especie": "Gato",
     "raza": "Siames",
     "castrado": true,
@@ -12,7 +12,7 @@ Content-Type: application/json
     "fechaNac": "2015-01-01"
 }
 ###
-GET http://localhost:3000/api/mascota/duenio/3
+GET http://localhost:3000/api/mascota/duenio/2
 
 ###
 PATCH http://localhost:3000/api/mascota/1

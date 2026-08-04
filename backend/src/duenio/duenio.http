@@ -1,42 +1,28 @@
 GET http://localhost:3000/api/duenio
+###
 
-### obtener un duenio
-GET http://localhost:3000/api/duenio/2
-
-### crear un nuevo character
 POST http://localhost:3000/api/duenio
 Content-Type: application/json
 
 {
-  "nombre_duenio": "negrera",
-  "apellido_duenio": "warrior",
-  "telefono_duenio": "123456789",
-  "mail_duenio": "atila@warrior.com",
-  "dni": "12345678",
-  "direccion": "123 Main Street"
+    "nombre": "Marta",
+    "apellido": "Perez",
+    "dni": "12345678",
+    "direccion": "Calle Falsa 123",
+    "telefono": "12412",
+    "mail": "juanadelacroa@gmail.com"
 }
+###
+GET http://localhost:3000/api/duenio/2
 
-### modificar un character (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/duenio/2
-Content-Type: application/json
-
-{
-  "nombre_duenio": "modificado",
-  "apellido_duenio": "gordita",
-  "telefono_duenio": "123456789",
-  "mail_duenio": "anakin@skywalker.com",
-  "dni": "87654321",
-  "direccion": "456 Oak Avenue"
-}
-
-
-### modificar un character (PATCH - recurso parcial)
+###
 PATCH http://localhost:3000/api/duenio/1
 Content-Type: application/json
 
 {
-  "apellido_duenio": "blabla"
+    "especie": "Gato"
 }
 
-### borrar un character
-DELETE http://localhost:3000/api/duenio/2
+###
+
+DELETE http://localhost:3000/api/duenio/3

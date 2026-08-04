@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
-import { Duenio } from './duenio.entity.js'
-import { Persona } from '../persona/persona.entity.js'
+import { Persona } from './persona.entity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
 async function findAll(req: Request, res: Response) {
   try {
-    const duenios = await em.find(Duenio, {})
-    res.status(200).json({ message: "Duenios found", data: duenios })
+    const personas = await em.find(Persona, {})
+    res.status(200).json({ message: "Personas found", data: personas })
   } catch (error) {
   res.status(500).json({
     message: (error as Error).message
@@ -18,13 +17,11 @@ async function findAll(req: Request, res: Response) {
 
 async function findOne(req: Request, res: Response) {
   try {
-    const duenio = await em.findOne(Duenio, { persona: await em.findOne(Persona, 
-        { id_persona: parseInt(req.params.id_duenio as string) }) 
-    })
-    if (!duenio) {
-      return res.status(404).json({ message: "Duenio not found" })
+    const persona = await em.findOne(Persona, { id_persona: parseInt(req.params.id_persona as string) })
+    if (!persona) {
+      return res.status(404).json({ message: "Persona not found" })
     }
-    res.status(200).json({ message: "Duenio found", data: duenio })
+    res.status(200).json({ message: "Persona found", data: persona })
   } catch (error) {
   res.status(500).json({
     message: (error as Error).message
@@ -42,11 +39,8 @@ async function add(req: Request, res: Response) {
     dni,
     direccion
   })
-  const duenio = em.create(Duenio, {
-      persona: persona
-    });
   await em.flush()
-  res.status(201).json({ message: "Duenio created", data: duenio })
+  res.status(201).json({ message: "Persona created", data: persona })
 }
 
 async function update(req: Request, res: Response) {
@@ -63,12 +57,8 @@ async function update(req: Request, res: Response) {
     dni,
     direccion
   })
-  const duenio = await em.findOne(Duenio, { persona })
-  if (duenio) {
-    em.assign(duenio.persona, persona)
-  }
   await em.flush()
-  res.status(200).json({ message: "Duenio updated", data: duenio })
+  res.status(200).json({ message: "Persona updated", data: persona })
 }
 
 async function patch(req: Request, res: Response) {
@@ -77,28 +67,18 @@ async function patch(req: Request, res: Response) {
     return res.status(404).json({ message: "Persona not found" })
   }
   em.assign(persona, req.body)
-  const duenio = await em.findOne(Duenio, { persona })
-  if (!duenio) {
-    return res.status(404).json({ message: "Duenio not found" })
-  }
-  em.assign(duenio.persona, persona)
   await em.flush()
-  res.status(200).json({ message: "Duenio patched", data: duenio })
+  res.status(200).json({ message: "Persona patched", data: persona })
 }
 
 async function remove(req: Request, res: Response) {
-  const persona = await em.findOne(Persona, { id_persona: parseInt(req.params.id_duenio as string) })
+  const persona = await em.findOne(Persona, { id_persona: parseInt(req.params.id_persona as string) })
   if (!persona) {
     return res.status(404).json({ message: "Persona not found" })
   }
   await em.remove(persona)
-  const duenio = await em.findOne(Duenio, { persona })
-  if (!duenio) {
-    return res.status(404).json({ message: "Duenio not found" })
-  }
-  await em.remove(duenio)
   await em.flush()
-  res.status(200).json({ message: "Duenio removed", data: duenio })
+  res.status(200).json({ message: "Persona removed", data: persona })
 }
 
 export { findAll, findOne, add, update, patch, remove }
