@@ -1,16 +1,15 @@
 import './App.css'
+import Sidebar from './components/sidebar'
 
 function App() {
   return (
-    <div className="min-h-screen bg-purple-100 flex">
-      <header className="bg-white shadow-md px-6 w-full h-20 flex flex-row place-content-between items-center align-middle">
-        <img src="./public/logoVet.png" alt="logo de veterinaria" className="w-auto h-full"></img>
-        <ul className="flex flex-row gap-4 align-middle items-center">
-          <li><a href="#" className="text-gray-700 hover:text-purple-600">Nosotros</a></li>
-          <li><a href="#" className="text-gray-700 hover:text-purple-600">Contacto</a></li>
-          <li><button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Iniciar sesión</button></li>
-        </ul>
+    <div className="min-h-screen bg-purple-50 flex">
+
+      <header className="bg-purple relative shadow-md px-3 py-2 w-full h-20 flex flex-row items-center align-middle">
+        <Sidebar />
+        <img src="./public/logoVet.png" alt="logo de veterinaria" className="w-auto absolute left-1/2 -translate-x-1/2 h-full rounded-full"></img>
       </header>
+
 
       
     </div>
