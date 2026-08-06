@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AppointButton from "./appointbutton";
 
 function Sidebar() {
   const [open, setOpen] = useState(false);
@@ -28,21 +29,19 @@ function Sidebar() {
         </button>
 
         <nav className="flex flex-col gap-6 p-8 pt-20">
-          <a href="#" className="text-lg hover:text-violet-800 text-violet-500">
+          <a href="#" className="text-lg hover:text-violet-950 text-violet-800">
             Inicio
           </a>
 
-          <a href="#" className="text-lg hover:text-violet-800 text-violet-500">
+          <a href="#" className="text-lg hover:text-violet-950 text-violet-800">
             Nosotros
           </a>
 
-          <a href="#" className="text-lg hover:text-violet-800 text-violet-500">
+          <a href="#" className="text-lg hover:text-violet-950 text-violet-800">
             Contacto
           </a>
 
-          <button className="text-lg mt-8 hover:text-violet-800 text-white bg-violet-600 hover:bg-purple-500 px-4 py-2 rounded-xl">
-            Agendar turno
-          </button>
+          <AppointButton />
         </nav>
         <div className="mt-auto p-6 flex justify-center">
             <img src="./public/logoVet.png" alt="logo de veterinaria" className="w-full h-auto"></img></div>
