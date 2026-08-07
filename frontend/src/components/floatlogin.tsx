@@ -1,7 +1,10 @@
 function FloatLogin(){
     return(
         <div className="mt-8 mx-6 min-w-10/12 flex flex-col gap-6 bg-white shadow-xl rounded-xl border-2 border-gray-300 p-4">
-            <h2 className="text-xl font-plusjakarta text-purple-950">Inicio de sesión</h2>
+                <div className="flex items-center gap-3">
+                    <img src="./icons/ingresar.png" alt="logo de veterinaria" className="max-w-7"></img>
+                    <h2 className="text-xl font-plusjakarta text-purple-950">Inicio de sesión</h2>
+                </div>
             <p className="font-plusjakarta2 text-gray-600 ">Accede a registros médicos y próximas citas.</p>
             
             <form className="flex flex-col gap-4">
