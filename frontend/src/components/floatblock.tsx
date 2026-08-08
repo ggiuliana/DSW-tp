@@ -7,7 +7,7 @@ interface FloatBlockProps {
 
 function FloatBlock({ titulo, contenido, icono, color }: FloatBlockProps) {
     return (
-        <div className="flex md:flex-col items-start align-top place-content-between gap-4 rounded-2xl shadow-xl p-6 border border-gray-300 md:w-1/3 md:min-h-62.5 h-full">
+        <div className="flex md:flex-col items-start align-top  md:place-content-start gap-4 rounded-2xl shadow-xl p-6 border border-gray-300 min-w-full md:min-w-0 md:w-1/3 md:min-h-70 lg:min-h-62 h-full">
             <div className={`flex items-center align-top bg-orange-200 rounded-2xl p-3 gap-3 ${color}`} >
                 <img src={`${icono}`} alt = {`${titulo}`} className="max-w-12"></img>
             </div>
