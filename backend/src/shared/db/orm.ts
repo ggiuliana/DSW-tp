@@ -1,22 +1,9 @@
-import { MikroORM } from '@mikro-orm/core'
-import { SqlHighlighter } from '@mikro-orm/sql-highlighter'
+import { MikroORM } from '@mikro-orm/core';
+import config from '../../mikro-orm.config.js';
 
-export const orm = await MikroORM.init({
-    entities: ["dist/**/*.entity.js"],
-    entitiesTs: ["src/**/*.entity.ts"],
-    dbName: 'veterinaria',
-    clientUrl: 'mysql://vet:vet@localhost:3307/veterinaria',
-    type: "mysql",
-    highlighter: new SqlHighlighter(),
-    debug: true,
-    schemaGenerator: {
-        disableForeignKeys: false,
-        createForeignKeyConstraints: true,
-        ignoreSchema:[],
-    },
-})
+export const orm = await MikroORM.init(config);
 
 export const syncSchema = async () => {
-    const generator = orm.getSchemaGenerator()
-    await generator.updateSchema()
-}
+    const generator = orm.getSchemaGenerator();
+    await generator.updateSchema();
+};

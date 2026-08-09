@@ -1,0 +1,25 @@
+GET  http://localhost:3000/api/usuario
+
+###
+
+POST http://localhost:3000/api/usuario/2
+Content-Type: application/json
+
+{
+    "nombre_usuario": "Marta",
+    "contrasenia": "Perez"
+}
+
+###
+
+PATCH http://localhost:3000/api/usuario/1
+Content-Type: application/json
+
+{
+
+    "contrasenia": "hola123"
+}
+
+###
+
+DELETE http://localhost:3000/api/usuario/1

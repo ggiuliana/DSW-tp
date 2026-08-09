@@ -3,6 +3,7 @@ import express from 'express'
 import { personaRouter } from './persona/persona.routes.js'
 import { mascotaRouter } from './mascota/mascota.routes.js'
 import { duenioRouter } from './duenio/duenio.routes.js'
+import { usuarioRouter } from './usuario/usuario.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 app.use('/api/persona', personaRouter)
 app.use('/api/mascota', mascotaRouter)
 app.use('/api/duenio', duenioRouter)
+app.use('/api/usuario', usuarioRouter)
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
