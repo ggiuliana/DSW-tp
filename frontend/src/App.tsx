@@ -1,11 +1,24 @@
 import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './components/header'
 import AppointButton from './components/appointbutton'
 import FloatBlock from './components/floatblock'
 import Footer from './components/footer'
 import AlignedText from './components/alignedtext'
+import Login from './components/Login';
 
 function App() {
+  return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-purple-50 flex flex-col items-center gap-4">
 
@@ -29,7 +42,7 @@ function App() {
 
           </div>
 
-          <div className="w-full flex flex-col items-center justify-center my-8 bg-white rounded-xl shadow-xl p-6 md:px-8 gap-4">
+          <div className="w-full flex flex-col items-center justify-center my-8 bg-white rounded-xl max-w-10/12 shadow-xl p-6 md:px-8 gap-4">
               <h3 className="font-plusjakarta text-lg text-violet-950 text-shadow-3xs text-center">Para agendar un turno, inicia sesión</h3>
               <AppointButton />
           </div>
@@ -80,7 +93,6 @@ function App() {
       </div>
     </div>
   )
-  
 }
 
 export default App

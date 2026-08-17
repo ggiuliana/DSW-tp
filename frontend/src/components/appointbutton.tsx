@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 interface AppointButtonProps {
     color?: string
     hover?: string
@@ -5,8 +7,15 @@ interface AppointButtonProps {
 }
 
 function AppointButton({color = "bg-violet-800", hover = "hover:bg-violet-900", text = "text-violet-200"}: AppointButtonProps) {
+    const navigate = useNavigate();
+
+    const irALogin = () => {
+        navigate("/login");
+    };
+    
     return(
-        <button className={`
+        <button 
+        className={`
         ${color} 
         ${hover} 
         ${text}
@@ -15,7 +24,11 @@ function AppointButton({color = "bg-violet-800", hover = "hover:bg-violet-900", 
         min-w-10/12
         rounded-full
         my-4
-        `}>
+        `}
+
+        onClick={irALogin}
+
+        >
             Iniciar sesión
         </button>
     )
