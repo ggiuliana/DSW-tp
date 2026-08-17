@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Usuario } from './usuario.entity.js'
 import { Persona } from '../persona/persona.entity.js'
 import { Duenio } from "../duenio/duenio.entity.js"
+import { Veterinario } from "../veterinario/veterinario.entity.js"
 import { Rol } from "../rol/rol.entity.js"
 import { orm } from '../shared/db/orm.js'
 
@@ -44,13 +45,15 @@ async function add(req:Request, res:Response){
         if (existingUsuario) {
             return res.status(404).json({ message: "Persona already has an user" })
         }
-        const duenio = await em.findOne(Duenio, {persona: persona})
         let rolAct: string
-        if (!duenio){
-            rolAct = "Veterinario"
+         if (persona instanceof Duenio) {
+            rolAct = "Duenio";
+        }
+        else if (persona instanceof Veterinario) {
+            rolAct = "Veterinario";
         }
         else {
-            rolAct = "Duenio"
+            return res.status(400).json({message: "Tipo de persona inválido"});
         }
         const rol = await em.findOne(Rol, {nombre_rol: rolAct})
         if (!rol) {

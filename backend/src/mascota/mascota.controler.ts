@@ -33,13 +33,7 @@ async function findOne(req: Request, res: Response) {
 
 async function findByDuenio(req: Request, res: Response) {
   try{
-    const persona = await em.findOne(Persona, {
-      id_persona: parseInt(req.params.id_duenio as string)
-    });
-    if (!persona) {
-      return res.status(404).json({message: "Duenio not found"});
-    }
-    const duenio = await em.findOne(Duenio, {persona: persona});
+    const duenio = await em.findOne(Duenio, {id_persona: parseInt(req.params.id_duenio as string)});
     if (!duenio) {
       return res.status(404).json({message: "Duenio not found"});
     }
@@ -51,9 +45,7 @@ async function findByDuenio(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-  const duenio = await em.findOne(Duenio, 
-        { persona: await em.findOne(Persona, { id_persona: parseInt(req.params.id_duenio as string) }) 
-      })
+  const duenio = await em.findOne(Duenio, {id_persona: parseInt(req.params.id_duenio as string)})
   const { nombre_mascota, especie, raza, castrado, sexo, fechaNac } = req.body
   if(!duenio){
     return res.status(404).json({ message: "Duenio not found" })

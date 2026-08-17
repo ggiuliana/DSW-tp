@@ -1,0 +1,45 @@
+GET http://localhost:3000/api/veterinario
+
+### obtener una veterinario por id
+GET http://localhost:3000/api/veterinario/3
+
+### crear un nuevo veterinario
+POST http://localhost:3000/api/veterinario
+Content-Type: application/json
+
+{
+  "nombre": "vete2",
+  "apellido": "warrior",
+  "telefono": "123456789",
+  "mail": "atila@warrior.com",
+  "dni": "12345678",
+  "direccion": "123 Main Street",
+  "matricula": "15132rasdf",
+  "especialidad": "Cardiologia"
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/veterinario/4
+Content-Type: application/json
+
+{
+  "nombre": "modificado",
+  "apellido": "alalla",
+  "telefono": "123456789",
+  "mail": "anakin@skywalker.com",
+  "dni": "87654321",
+  "direccion": "456 Oak Avenue",
+  "matricula": "15132rasdf",
+  "especialidad": "Cardiologia"
+}
+
+### modificar un veterinario (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/veterinario/4
+Content-Type: application/json
+
+{
+  "apellido": "blabla"
+}
+
+### borrar un veterinario
+DELETE http://localhost:3000/api/veterinario/5

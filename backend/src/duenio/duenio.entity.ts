@@ -1,8 +1,8 @@
-import { Entity, OneToOne } from '@mikro-orm/core'
+import { Entity } from '@mikro-orm/core'
 import { Persona } from '../persona/persona.entity.js'
 
-@Entity()
-export class Duenio {
-    @OneToOne(() => Persona, { primary: true })
-    persona!: Persona;
+@Entity({
+  discriminatorValue: 'duenio',
+})
+export class Duenio extends Persona {
 }

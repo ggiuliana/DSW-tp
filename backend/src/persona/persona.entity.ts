@@ -1,7 +1,10 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
 
-@Entity()
-export class Persona {
+@Entity({
+  discriminatorColumn: 'tipo_persona',
+  abstract: true,
+})
+export abstract class Persona {
   @PrimaryKey({ autoincrement: true })
   id_persona?: number
 
