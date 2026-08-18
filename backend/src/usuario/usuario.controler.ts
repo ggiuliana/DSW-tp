@@ -115,4 +115,38 @@ async function remove(req:Request, res:Response){
     res.status(200).json({message: "Usuario removed"})
 }
 
-export { findAll, findOne, add, update, patch, remove }
+async function login(req:Request, res:Response){
+    try {
+        const { nombre_usuario, contrasenia } = req.body
+        
+        // Validar que existan los campos
+        if (!nombre_usuario || !contrasenia) {
+            return res.status(400).json({message: "Usuario y contraseña son requeridos"})
+        }
+
+        // Buscar el usuario y mostrar debug
+        console.log("Buscando usuario:", nombre_usuario);
+        const usuario = await em.findOne(Usuario, { nombre_usuario: nombre_usuario.trim() })
+        
+        if (!usuario){
+            console.log("Usuario no encontrado");
+            return res.status(404).json({message: "Usuario no encontrado"})
+        }
+        
+        console.log("Usuario encontrado:", usuario.nombre_usuario);
+        
+        // Comparar contraseña
+        if (usuario.contrasenia !== contrasenia){
+            console.log("Contraseña incorrecta");
+            return res.status(401).json({message: "Contraseña incorrecta"})
+        }
+        
+        console.log("Login exitoso");
+        res.status(200).json({message: "Login exitoso", data: usuario});
+    } catch (error) {
+        console.error("Error en login:", error);
+        res.status(500).json({message: (error as Error).message});
+    }
+}
+
+export { findAll, findOne, add, update, patch, remove, login }

@@ -6,8 +6,8 @@ POST http://localhost:3000/api/usuario/2
 Content-Type: application/json
 
 {
-    "nombre_usuario": "Marta",
-    "contrasenia": "Perez"
+    "nombre_usuario": "user1",
+    "contrasenia": "user123"
 }
 
 ###
@@ -22,4 +22,14 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/api/usuario/1
+DELETE http://localhost:3000/api/usuario/4
+
+###
+
+POST http://localhost:3000/api/usuario/login
+Content-Type: application/json
+
+{
+    "nombre_usuario": "user1",
+    "contrasenia": "user123"
+}

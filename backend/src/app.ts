@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import express from 'express'
+import cors from 'cors'
 import { personaRouter } from './persona/persona.routes.js'
 import { mascotaRouter } from './mascota/mascota.routes.js'
 import { duenioRouter } from './duenio/duenio.routes.js'
@@ -9,6 +10,11 @@ import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 
 const app = express()
+
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
+
 app.use(express.json())
 
 app.use((req, res, next) => {

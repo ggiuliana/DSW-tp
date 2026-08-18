@@ -5,7 +5,7 @@ import AppointButton from './components/appointbutton'
 import FloatBlock from './components/floatblock'
 import Footer from './components/footer'
 import AlignedText from './components/alignedtext'
-import Login from './components/Login';
+import Login from './components/login';
 
 function App() {
   return (

@@ -1,6 +1,43 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
+interface LoginForm {
+    nombre_usuario: string;
+    contrasenia: string;
+}
+
 function Login(){
+    const navigate = useNavigate();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<LoginForm>();
+
+    const onSubmit = async (data: LoginForm) => {
+        const response = await fetch("http://localhost:3000/api/usuario/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const resultado = await response.json();
+
+        console.log(resultado);
+    };
+    
     return(
-        <div className="min-h-screen flex items-center justify-center px-4">
+
+        <div className="relative min-h-screen flex items-center justify-center px-4">
+            <button
+                onClick={() => navigate("/")}
+                className="absolute top-4 left-4 bg-purple-950 hover:bg-violet-900 text-white px-4 py-2 rounded-full font-plusjakarta2"
+            >
+                ← Volver
+            </button>
             <div className="w-full max-w-md bg-white shadow-xl rounded-xl border-2 border-gray-300 p-4">
                 <div className="flex items-center gap-3">
                     <img
@@ -17,17 +54,45 @@ function Login(){
                     Accede a registros médicos y próximas citas.
                 </p>
 
-                <form className="mt-6 flex flex-col gap-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col gap-4">
                     <input
                         type="user"
                         placeholder="Nombre de usuario"
+                        {...register("nombre_usuario", {
+                        required: {
+                            value: true,
+                            message: "El usuario es obligatorio."
+                        }
+                        })}
                         className="border-2 bg-violet-50 border-gray-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-violet-500 font-plusjakarta"
                     />
+                        {errors.nombre_usuario && 
+                            <span>{errors.nombre_usuario.message as string}</span>
+                        }
                     <input
                         type="password"
                         placeholder="Contraseña"
+                        {...register("contrasenia", {
+                        required: {
+                            value: true,
+                            message: "La contraseña es obligatoria."
+                        }
+                        })}
                         className="border-2 bg-violet-50 border-gray-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-violet-500 font-plusjakarta"
                     />
+                        {errors.contrasenia && 
+                            <span>{errors.contrasenia.message as string}</span>
+                        }
+                    
+                    <div className="flex flex-col gap-2 text-sm mt-2">
+                        <a href="#" className="text-purple-950 hover:underline font-plusjakarta2">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                        <a href="#" className="text-purple-950 hover:underline font-plusjakarta2">
+                            ¿Eres nuevo? Regístrate
+                        </a>
+                    </div>
+
                     <div className="flex justify-end">
                         <button
                             type="submit"
