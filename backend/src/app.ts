@@ -7,6 +7,7 @@ import { duenioRouter } from './duenio/duenio.routes.js'
 import { usuarioRouter } from './usuario/usuario.routes.js'
 import { veterinarioRouter } from './veterinario/veterinario.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
+import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
 
 const app = express()
@@ -32,6 +33,7 @@ app.use((_, res) => {
 })
 
 await syncSchema()
+await orm.getSeeder().seed(DatabaseSeeder)
 
 app.listen(3000, () => {
   console.log('Server runnning on http://localhost:3000/')

@@ -5,6 +5,8 @@ import { Duenio } from "../duenio/duenio.entity.js"
 import { Veterinario } from "../veterinario/veterinario.entity.js"
 import { Rol } from "../rol/rol.entity.js"
 import { orm } from '../shared/db/orm.js'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '../shared/auth.middleware.js'
 
 const em = orm.em
 
@@ -118,33 +120,35 @@ async function remove(req:Request, res:Response){
 async function login(req:Request, res:Response){
     try {
         const { nombre_usuario, contrasenia } = req.body
-        
-        // Validar que existan los campos
         if (!nombre_usuario || !contrasenia) {
             return res.status(400).json({message: "Usuario y contraseña son requeridos"})
         }
-
-        // Buscar el usuario y mostrar debug
-        console.log("Buscando usuario:", nombre_usuario);
-        const usuario = await em.findOne(Usuario, { nombre_usuario: nombre_usuario.trim() })
-        
+        const usuario = await em.findOne(
+            Usuario,
+            { nombre_usuario: nombre_usuario.trim() },
+            { populate: ['rol'] }
+        )
         if (!usuario){
-            console.log("Usuario no encontrado");
             return res.status(404).json({message: "Usuario no encontrado"})
         }
-        
-        console.log("Usuario encontrado:", usuario.nombre_usuario);
-        
-        // Comparar contraseña
         if (usuario.contrasenia !== contrasenia){
-            console.log("Contraseña incorrecta");
             return res.status(401).json({message: "Contraseña incorrecta"})
         }
-        
-        console.log("Login exitoso");
-        res.status(200).json({message: "Login exitoso", data: usuario});
+        const token = jwt.sign(
+            {
+                sub: usuario.id_usuario,
+                nombre_usuario: usuario.nombre_usuario,
+                rol: usuario.rol?.nombre_rol
+            },
+            jwtSecret,
+            { expiresIn: '2h' }
+        )
+        const { contrasenia: _, ...usuarioSinContrasenia } = usuario
+        res.status(200).json({
+            message: "Login exitoso",
+            data: { usuario: usuarioSinContrasenia, token }
+        });
     } catch (error) {
-        console.error("Error en login:", error);
         res.status(500).json({message: (error as Error).message});
     }
 }

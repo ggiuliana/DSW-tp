@@ -6,6 +6,18 @@ interface LoginForm {
     contrasenia: string;
 }
 
+interface LoginResponse {
+    data?: {
+        token: string;
+        usuario: {
+            rol?: {
+                nombre_rol: string;
+            };
+        };
+    };
+    message: string;
+}
+
 function Login(){
     const navigate = useNavigate();
 
@@ -23,10 +35,20 @@ function Login(){
             },
             body: JSON.stringify(data)
         });
-
-        const resultado = await response.json();
-
-        console.log(resultado);
+        const resultado: LoginResponse = await response.json();
+        if (!response.ok || !resultado.data) {
+            alert(resultado.message);
+            return;
+        }
+        const { token, usuario } = resultado.data;
+        const rol = usuario.rol?.nombre_rol;
+        localStorage.setItem("token", token);
+        const rutasPorRol: Record<string, string> = {
+            Duenio: "/duenio",
+            Veterinario: "/veterinario",
+            Administrador: "/administrador"
+        };
+        navigate(rutasPorRol[rol ?? ""] ?? "/");
     };
     
     return(

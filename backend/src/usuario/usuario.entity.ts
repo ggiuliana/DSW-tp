@@ -20,7 +20,7 @@ export class Usuario {
     @Property({ onCreate: () => new Date() })
     fecha_alta?: Date
 
-    @OneToOne(() => Persona, {nullable: false, onDelete: 'cascade'})
+    @OneToOne(() => Persona, {nullable: true, onDelete: 'cascade'})
     persona?: Persona
 
     @ManyToOne(() => Rol, {nullable: true, onDelete: "set null"})

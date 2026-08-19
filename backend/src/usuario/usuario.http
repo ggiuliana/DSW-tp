@@ -16,7 +16,6 @@ PATCH http://localhost:3000/api/usuario/1
 Content-Type: application/json
 
 {
-
     "contrasenia": "hola123"
 }
 
@@ -30,6 +29,6 @@ POST http://localhost:3000/api/usuario/login
 Content-Type: application/json
 
 {
-    "nombre_usuario": "user1",
-    "contrasenia": "user123"
+    "nombre_usuario": "admin",
+    "contrasenia": "admin123"
 }

@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Header from './components/header'
 import AppointButton from './components/appointbutton'
 import FloatBlock from './components/floatblock'
@@ -13,9 +13,53 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/duenio" element={<RutaProtegida rolRequerido="Duenio"><Dashboard rol="Duenio" /></RutaProtegida>} />
+                <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><Dashboard rol="Veterinario" /></RutaProtegida>} />
+                <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><Dashboard rol="Administrador" /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
     );
+}
+
+interface TokenPayload {
+  rol?: string;
+  exp?: number;
+}
+
+function leerToken(): TokenPayload | null {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))) as TokenPayload;
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      return null;
+    }
+    return payload;
+  } catch {
+    localStorage.removeItem("token");
+    return null;
+  }
+}
+
+function RutaProtegida({ rolRequerido, children }: { rolRequerido: string; children: React.ReactNode }) {
+  const payload = leerToken();
+
+  if (!payload) return <Navigate to="/login" replace />;
+  if (payload.rol !== rolRequerido) return <Navigate to="/" replace />;
+
+  return <>{children}</>;
+}
+
+function Dashboard({ rol }: { rol: string }) {
+  return (
+    <main className="min-h-screen bg-purple-50 p-8">
+      <h1 className="font-plusjakarta text-3xl text-purple-950">
+        Panel de {rol}
+      </h1>
+    </main>
+  );
 }
 
 function Home() {
