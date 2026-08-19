@@ -110,7 +110,7 @@ function Login(){
                         <a href="#" className="text-purple-950 hover:underline font-plusjakarta2">
                             ¿Olvidaste tu contraseña?
                         </a>
-                        <a href="#" className="text-purple-950 hover:underline font-plusjakarta2">
+                        <a onClick={() => navigate("/register")} className="text-purple-950 hover:underline font-plusjakarta2">
                             ¿Eres nuevo? Regístrate
                         </a>
                     </div>

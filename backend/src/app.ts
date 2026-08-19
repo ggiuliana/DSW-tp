@@ -1,7 +1,6 @@
 import 'reflect-metadata'
 import express from 'express'
 import cors from 'cors'
-import { personaRouter } from './persona/persona.routes.js'
 import { mascotaRouter } from './mascota/mascota.routes.js'
 import { duenioRouter } from './duenio/duenio.routes.js'
 import { usuarioRouter } from './usuario/usuario.routes.js'
@@ -22,7 +21,6 @@ app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
 })
 
-app.use('/api/persona', personaRouter)
 app.use('/api/mascota', mascotaRouter)
 app.use('/api/duenio', duenioRouter)
 app.use('/api/usuario', usuarioRouter)

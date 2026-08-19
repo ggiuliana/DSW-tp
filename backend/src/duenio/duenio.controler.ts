@@ -31,16 +31,23 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   const { nombre, apellido, telefono, mail, dni, direccion } = req.body
-  const duenio = em.create(Duenio, {
+  const mailNormalizado = mail.trim().toLowerCase()
+  const duenioExistente = await em.findOne(Duenio, { mail: mailNormalizado })
+
+  if (duenioExistente) {
+    return res.status(409).json({ message: "El mail ya está registrado" })
+  }
+
+  const persona = em.create(Duenio, {
     nombre,
     apellido,
     telefono,
-    mail,
+    mail: mailNormalizado,
     dni,
     direccion
   })
   await em.flush()
-  res.status(201).json({ message: "Duenio created", data: duenio })
+  res.status(201).json({ message: "Persona created", data: persona })
 }
 
 async function update(req: Request, res: Response) {
@@ -49,11 +56,16 @@ async function update(req: Request, res: Response) {
   if (!duenio) {
     return res.status(404).json({ message: "Duenio not found" })
   }
+  const mailNormalizado = mail.trim().toLowerCase()
+  const duenioExistente = await em.findOne(Duenio, { mail: mailNormalizado })
+  if (duenioExistente) {
+    return res.status(409).json({ message: "El mail ya está registrado" })
+  }
   em.assign(duenio, {
     nombre,
     apellido,
     telefono,
-    mail,
+    mail: mailNormalizado,
     dni,
     direccion
   })

@@ -39,6 +39,13 @@ async function add(req:Request, res:Response){
     const { nombre_usuario, contrasenia } = req.body
     const estado = "Activo"
     try{
+        const nombreUsuarioNormalizado = nombre_usuario.trim()
+        const usuarioExistentePorNombre = await em.findOne(Usuario, {
+            nombre_usuario: nombreUsuarioNormalizado
+        })
+        if (usuarioExistentePorNombre) {
+            return res.status(409).json({ message: "El nombre de usuario ya está tomado" })
+        }
         const persona = await em.findOne(Persona, {id_persona: parseInt(req.params.id_persona as string)})
         if(!persona){
             return res.status(404).json({message: "Persona not found"})
@@ -62,7 +69,7 @@ async function add(req:Request, res:Response){
             return res.status(404).json({message: "Rol no encontrado"})}
 
         const usuario = await em.create(Usuario, {
-            nombre_usuario,
+            nombre_usuario: nombreUsuarioNormalizado,
             contrasenia,
             estado,
             persona,
@@ -72,6 +79,60 @@ async function add(req:Request, res:Response){
         res.status(201).json({ message: "Usuario created", data: usuario })
     } catch (error) {
         res.status(500).json({message: (error as Error).message});
+    }
+}
+
+async function registerDuenio(req: Request, res: Response) {
+    const {
+        nombre,
+        apellido,
+        telefono,
+        mail,
+        dni,
+        direccion,
+        nombre_usuario,
+        contrasenia
+    } = req.body
+    try {
+        const mailNormalizado = mail.trim().toLowerCase()
+        const nombreUsuarioNormalizado = nombre_usuario.trim()
+        await em.transactional(async (transactionEm) => {
+            const [personaExistente, usuarioExistente] = await Promise.all([
+                transactionEm.findOne(Duenio, { mail: mailNormalizado }),
+                transactionEm.findOne(Usuario, { nombre_usuario: nombreUsuarioNormalizado })
+            ])
+            if (personaExistente) {
+                throw new Error('El mail ya está registrado')
+            }
+            if (usuarioExistente) {
+                throw new Error('El nombre de usuario ya está tomado')
+            }
+            const rol = await transactionEm.findOneOrFail(Rol, {
+                nombre_rol: 'Duenio'
+            })
+            const persona = transactionEm.create(Duenio, {
+                nombre,
+                apellido,
+                telefono,
+                mail: mailNormalizado,
+                dni,
+                direccion
+            })
+            transactionEm.create(Usuario, {
+                nombre_usuario: nombreUsuarioNormalizado,
+                contrasenia,
+                estado: 'Activo',
+                persona,
+                rol
+            })
+        })
+        return res.status(201).json({ message: 'Registro exitoso' })
+    } catch (error) {
+        const mensaje = (error as Error).message
+        if (mensaje.includes('ya está registrado') || mensaje.includes('ya está tomado')) {
+            return res.status(409).json({ message: mensaje })
+        }
+        return res.status(500).json({ message: mensaje })
     }
 }
 
@@ -153,4 +214,4 @@ async function login(req:Request, res:Response){
     }
 }
 
-export { findAll, findOne, add, update, patch, remove, login }
+export { findAll, findOne, add, update, patch, remove, login, registerDuenio }

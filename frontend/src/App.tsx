@@ -6,6 +6,7 @@ import FloatBlock from './components/floatblock'
 import Footer from './components/footer'
 import AlignedText from './components/alignedtext'
 import Login from './components/login';
+import Register from './components/register'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register/>} />
                 <Route path="/duenio" element={<RutaProtegida rolRequerido="Duenio"><Dashboard rol="Duenio" /></RutaProtegida>} />
                 <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><Dashboard rol="Veterinario" /></RutaProtegida>} />
                 <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><Dashboard rol="Administrador" /></RutaProtegida>} />

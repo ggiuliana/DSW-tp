@@ -17,7 +17,7 @@ export abstract class Persona {
   @Property()
   telefono!: string
 
-  @Property()
+  @Property({ unique: true })
   mail!: string
 
   @Property()

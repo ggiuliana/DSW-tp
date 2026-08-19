@@ -8,7 +8,7 @@ export class Usuario {
     @PrimaryKey({autoincrement: true})
     id_usuario?: number
 
-    @Property()
+    @Property({ unique: true })
     nombre_usuario!: string
     
     @Property()
