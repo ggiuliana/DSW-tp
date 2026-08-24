@@ -187,7 +187,7 @@ async function login(req:Request, res:Response){
         const usuario = await em.findOne(
             Usuario,
             { nombre_usuario: nombre_usuario.trim() },
-            { populate: ['rol'] }
+            { populate: ['rol', 'persona'] }
         )
         if (!usuario){
             return res.status(404).json({message: "Usuario no encontrado"})

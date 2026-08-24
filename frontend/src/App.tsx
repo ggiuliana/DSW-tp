@@ -5,8 +5,9 @@ import AppointButton from './components/appointbutton'
 import FloatBlock from './components/floatblock'
 import Footer from './components/footer'
 import AlignedText from './components/alignedtext'
-import Login from './components/login';
-import Register from './components/register'
+import Login from './pages/login';
+import Register from './pages/register'
+import PanelDuenio from './pages/panelduenio';
 
 function App() {
   return (
@@ -15,7 +16,10 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register/>} />
-                <Route path="/duenio" element={<RutaProtegida rolRequerido="Duenio"><Dashboard rol="Duenio" /></RutaProtegida>} />
+                <Route path="/duenio" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
+                <Route path="/duenio/mascotas" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
+                <Route path="/duenio/turnos" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
+                <Route path="/duenio/perfil" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><Dashboard rol="Veterinario" /></RutaProtegida>} />
                 <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><Dashboard rol="Administrador" /></RutaProtegida>} />
             </Routes>

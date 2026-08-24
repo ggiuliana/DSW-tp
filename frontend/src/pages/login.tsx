@@ -10,6 +10,9 @@ interface LoginResponse {
     data?: {
         token: string;
         usuario: {
+            persona?: {
+                nombre: string;
+            };
             rol?: {
                 nombre_rol: string;
             };
@@ -43,6 +46,7 @@ function Login(){
         const { token, usuario } = resultado.data;
         const rol = usuario.rol?.nombre_rol;
         localStorage.setItem("token", token);
+        localStorage.setItem("nombrePersona", usuario.persona?.nombre ?? "");
         const rutasPorRol: Record<string, string> = {
             Duenio: "/duenio",
             Veterinario: "/veterinario",
