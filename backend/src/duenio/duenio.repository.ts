@@ -1,4 +1,5 @@
 import { Duenio } from './duenio.entity.js'
+import { Persona } from '../persona/persona.entity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
@@ -15,6 +16,10 @@ export class DuenioRepository {
 
   findByMail(mail: string) {
     return em.findOne(Duenio, { mail })
+  }
+
+  findPersonaByMail(mail: string) {
+    return em.findOne(Persona, { mail })
   }
 
   create(data: DuenioCreateData) {

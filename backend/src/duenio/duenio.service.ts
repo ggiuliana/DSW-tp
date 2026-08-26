@@ -25,7 +25,7 @@ export class DuenioService {
 
   async add(data: DuenioData) {
     const mail = normalizarMail(data.mail)
-    const existente = await duenioRepository.findByMail(mail)
+    const existente = await duenioRepository.findPersonaByMail(mail)
 
     if (existente) {
       throw new Error('MAIL_ALREADY_REGISTERED')
@@ -40,7 +40,7 @@ export class DuenioService {
     if (!duenio) return null
 
     const mail = normalizarMail(data.mail)
-    const existente = await duenioRepository.findByMail(mail)
+    const existente = await duenioRepository.findPersonaByMail(mail)
     if (existente && existente.id_persona !== id) {
       throw new Error('MAIL_ALREADY_REGISTERED')
     }
@@ -56,7 +56,7 @@ export class DuenioService {
     const cambios = { ...data }
     if (typeof cambios.mail === 'string') {
       cambios.mail = normalizarMail(cambios.mail)
-      const existente = await duenioRepository.findByMail(cambios.mail)
+      const existente = await duenioRepository.findPersonaByMail(cambios.mail)
       if (existente && existente.id_persona !== id) {
         throw new Error('MAIL_ALREADY_REGISTERED')
       }

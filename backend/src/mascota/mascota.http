@@ -1,10 +1,10 @@
 GET http://localhost:3000/api/mascota
 ###
-POST http://localhost:3000/api/mascota/duenio/3
+POST http://localhost:3000/api/mascota/duenio/6
 Content-Type: application/json
 
 {
-    "nombre_mascota": "Gata montes",
+    "nombre_mascota": "aniangaseio montes",
     "especie": "Gato",
     "raza": "Siames",
     "castrado": true,
@@ -12,16 +12,16 @@ Content-Type: application/json
     "fechaNac": "2015-01-01"
 }
 ###
-GET http://localhost:3000/api/mascota/duenio/2
+GET http://localhost:3000/api/mascota/duenio/6
 
 ###
-PATCH http://localhost:3000/api/mascota/1
+PATCH http://localhost:3000/api/mascota/2
 Content-Type: application/json
 
 {
-    "especie": "Gato"
+    "especie": "modificaod"
 }
 
 ###
 
-DELETE http://localhost:3000/api/mascota/1
+DELETE http://localhost:3000/api/mascota/2

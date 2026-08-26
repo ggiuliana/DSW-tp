@@ -1,88 +1,72 @@
-import { Request, Response, NextFunction } from 'express'
-import { Veterinario } from './veterinario.entity.js'
-import { orm } from '../shared/db/orm.js'
+import { Request, Response } from 'express'
+import { veterinarioService } from './veterinario.service.js'
 
-const em = orm.em
+function responderError(error: unknown, res: Response) {
+  if (error instanceof Error && error.message === 'MAIL_ALREADY_REGISTERED') {
+    return res.status(409).json({ message: 'El mail ya está registrado' })
+  }
 
-async function findAll(req: Request, res: Response) {
+  return res.status(500).json({
+    message: error instanceof Error ? error.message : 'Error interno del servidor',
+  })
+}
+
+async function findAll(_req: Request, res: Response) {
   try {
-    const veterinarios = await em.find(Veterinario, {})
-    res.status(200).json({ message: "Veterinarios found", data: veterinarios })
+    const veterinarios = await veterinarioService.findAll()
+    return res.status(200).json({ message: 'Veterinarios found', data: veterinarios })
   } catch (error) {
-  res.status(500).json({
-    message: (error as Error).message
-  });
+    return responderError(error, res)
   }
 }
 
 async function findOne(req: Request, res: Response) {
   try {
-    const veterinario = await em.findOne(Veterinario, { id_persona: parseInt(req.params.id_veterinario as string) })
-    if (!veterinario) {
-      return res.status(404).json({ message: "Veterinario not found" })
-    }
-    res.status(200).json({ message: "Veterinario found", data: veterinario })
+    const veterinario = await veterinarioService.findOne(Number(req.params.id_veterinario))
+    if (!veterinario) return res.status(404).json({ message: 'Veterinario not found' })
+    return res.status(200).json({ message: 'Veterinario found', data: veterinario })
   } catch (error) {
-  res.status(500).json({
-    message: (error as Error).message
-  });
+    return responderError(error, res)
   }
 }
 
 async function add(req: Request, res: Response) {
-  const { nombre, apellido, telefono, mail, dni, direccion, matricula, especialidad } = req.body
-  const veterinario = em.create(Veterinario, {
-    nombre,
-    apellido,
-    telefono,
-    mail,
-    dni,
-    direccion,
-    matricula,
-    especialidad
-  })
-  await em.flush()
-  res.status(201).json({ message: "Veterinario created", data: veterinario })
+  try {
+    const veterinario = await veterinarioService.add(req.body)
+    return res.status(201).json({ message: 'Veterinario created', data: veterinario })
+  } catch (error) {
+    return responderError(error, res)
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const { nombre, apellido, telefono, mail, dni, direccion, matricula, especialidad } = req.body
-  const veterinario = await em.findOne(Veterinario, { id_persona: parseInt(req.params.id_veterinario as string) })
-  if (!veterinario) {
-    return res.status(404).json({ message: "Veterinario not found" })
+  try {
+    const veterinario = await veterinarioService.update(Number(req.params.id_veterinario), req.body)
+    if (!veterinario) return res.status(404).json({ message: 'Veterinario not found' })
+    return res.status(200).json({ message: 'Veterinario updated', data: veterinario })
+  } catch (error) {
+    return responderError(error, res)
   }
-  em.assign(veterinario, {
-    nombre,
-    apellido,
-    telefono,
-    mail,
-    dni,
-    direccion,
-    matricula,
-    especialidad
-  })
-  await em.flush()
-  res.status(200).json({ message: "Veterinario updated", data: veterinario })
 }
 
 async function patch(req: Request, res: Response) {
-  const veterinario = await em.findOne(Veterinario, { id_persona: parseInt(req.params.id_veterinario as string) })
-  if (!veterinario) {
-    return res.status(404).json({ message: "Veterinario not found" })
+  try {
+    const veterinario = await veterinarioService.patch(Number(req.params.id_veterinario), req.body)
+    if (!veterinario) return res.status(404).json({ message: 'Veterinario not found' })
+    return res.status(200).json({ message: 'Veterinario patched', data: veterinario })
+  } catch (error) {
+    return responderError(error, res)
   }
-  em.assign(veterinario, req.body)
-  await em.flush()
-  res.status(200).json({ message: "Veterinario patched", data: veterinario })
 }
 
 async function remove(req: Request, res: Response) {
-  const veterinario = await em.findOne(Veterinario, { id_persona: parseInt(req.params.id_veterinario as string) })
-  if (!veterinario) {
-    return res.status(404).json({ message: "Veterinario not found" })
+  try {
+    const veterinario = await veterinarioService.remove(Number(req.params.id_veterinario))
+    if (!veterinario) return res.status(404).json({ message: 'Veterinario not found' })
+    return res.status(200).json({ message: 'Veterinario removed', data: veterinario })
+  } catch (error) {
+    return responderError(error, res)
   }
-  await em.remove(veterinario)
-  await em.flush()
-  res.status(200).json({ message: "Veterinario removed", data: veterinario })
 }
 
 export { findAll, findOne, add, update, patch, remove }
