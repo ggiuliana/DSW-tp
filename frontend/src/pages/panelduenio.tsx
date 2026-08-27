@@ -2,6 +2,7 @@ import DuenioFooter from "../components/dueniofooter";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import VerMascotas from "./mascotasduenio";
+import VerPerfil from "./perfilduenio.tsx"
 
 function PanelDuenio() {
     const nombre = localStorage.getItem("nombrePersona") || "usuario";
@@ -10,6 +11,7 @@ function PanelDuenio() {
     const navigate = useNavigate()
     const logOut = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("usuario");
         localStorage.removeItem("nombrePersona");
         localStorage.removeItem("idPersona");
         navigate("/")
@@ -22,7 +24,7 @@ function PanelDuenio() {
             case "/duenio/turnos":
                 return <h1 className="text-3xl text-black">Mis turnos</h1>;
             case "/duenio/perfil":
-                return <h1 className="text-3xl text-black">Mi perfil</h1>;
+                return <VerPerfil />;
             default:
                 return (
                 <div className="flex flex-col gap-7">

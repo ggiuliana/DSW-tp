@@ -1,5 +1,6 @@
 import { Duenio } from './duenio.entity.js'
 import { duenioRepository } from './duenio.repository.js'
+import { esMailValido } from '../shared/validation.js'
 
 export type DuenioData = {
   nombre: string
@@ -24,6 +25,7 @@ export class DuenioService {
   }
 
   async add(data: DuenioData) {
+    if (!esMailValido(data.mail)) throw new Error('INVALID_EMAIL_FORMAT')
     const mail = normalizarMail(data.mail)
     const existente = await duenioRepository.findPersonaByMail(mail)
 
@@ -38,6 +40,7 @@ export class DuenioService {
   async update(id: number, data: DuenioData) {
     const duenio = await duenioRepository.findById(id)
     if (!duenio) return null
+    if (!esMailValido(data.mail)) throw new Error('INVALID_EMAIL_FORMAT')
 
     const mail = normalizarMail(data.mail)
     const existente = await duenioRepository.findPersonaByMail(mail)
@@ -55,6 +58,7 @@ export class DuenioService {
 
     const cambios = { ...data }
     if (typeof cambios.mail === 'string') {
+      if (!esMailValido(cambios.mail)) throw new Error('INVALID_EMAIL_FORMAT')
       cambios.mail = normalizarMail(cambios.mail)
       const existente = await duenioRepository.findPersonaByMail(cambios.mail)
       if (existente && existente.id_persona !== id) {

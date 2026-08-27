@@ -10,6 +10,7 @@ interface LoginResponse {
     data?: {
         token: string;
         usuario: {
+            nombre_usuario: string;
             persona?: {
                 nombre: string;
                 id_persona?: number;
@@ -47,6 +48,7 @@ function Login(){
         const { token, usuario } = resultado.data;
         const rol = usuario.rol?.nombre_rol;
         localStorage.setItem("token", token);
+        localStorage.setItem("usuario", JSON.stringify(usuario));
         localStorage.setItem("nombrePersona", usuario.persona?.nombre ?? "");
         if (usuario.persona?.id_persona !== undefined) {
             localStorage.setItem("idPersona", String(usuario.persona.id_persona));

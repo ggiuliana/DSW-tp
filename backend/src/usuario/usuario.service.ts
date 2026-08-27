@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken'
 import { Duenio } from '../duenio/duenio.entity.js'
 import { Veterinario } from '../veterinario/veterinario.entity.js'
 import { jwtSecret } from '../shared/auth.middleware.js'
-import { Usuario } from './usuario.entity.js'
 import { usuarioRepository } from './usuario.repository.js'
+import { esMailValido } from '../shared/validation.js'
 
 export type UsuarioCreateData = {
   nombre_usuario: string
@@ -73,6 +73,7 @@ export class UsuarioService {
   }
 
   async registerDuenio(data: DuenioRegistroData) {
+    if (!esMailValido(data.mail)) throw new Error('INVALID_EMAIL_FORMAT')
     const mail = normalizarMail(data.mail)
     const nombre_usuario = normalizarNombre(data.nombre_usuario)
     const [personaExistente, usuarioExistente] = await Promise.all([
@@ -94,6 +95,7 @@ export class UsuarioService {
   }
 
   async registerVeterinario(data: VeterinarioRegistroData) {
+    if (!esMailValido(data.mail)) throw new Error('INVALID_EMAIL_FORMAT')
     const mail = normalizarMail(data.mail)
     const nombre_usuario = normalizarNombre(data.nombre_usuario)
     const [personaExistente, usuarioExistente] = await Promise.all([
@@ -124,6 +126,15 @@ export class UsuarioService {
       data.nombre_usuario = nombre_usuario
     }
     Object.assign(usuario, data)
+    return usuarioRepository.save(usuario)
+  }
+
+  async changePassword(id: number, currentPassword: string, newPassword: string) {
+    const usuario = await usuarioRepository.findById(id)
+    if (!usuario) return null
+    if (usuario.contrasenia !== currentPassword) throw new Error('INVALID_CURRENT_PASSWORD')
+
+    usuario.contrasenia = newPassword
     return usuarioRepository.save(usuario)
   }
 

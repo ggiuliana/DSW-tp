@@ -12,10 +12,14 @@ function errorResponse(error: unknown, res: Response) {
     INVALID_PERSONA_TYPE: 400,
     USER_NOT_FOUND: 404,
     INVALID_PASSWORD: 401,
+    INVALID_CURRENT_PASSWORD: 401,
+    INVALID_EMAIL_FORMAT: 400,
   }
   const messages: Record<string, string> = {
     USERNAME_ALREADY_REGISTERED: 'El nombre de usuario ya está tomado',
     MAIL_ALREADY_REGISTERED: 'El mail ya está registrado',
+    INVALID_CURRENT_PASSWORD: 'La contraseña actual es incorrecta',
+    INVALID_EMAIL_FORMAT: 'El mail debe tener un formato válido, por ejemplo duenio@mail.com',
   }
   return res.status(statuses[message] ?? 500).json({ message: messages[message] ?? message })
 }
@@ -64,6 +68,20 @@ async function update(req: Request, res: Response) {
   } catch (error) { return errorResponse(error, res) }
 }
 
+async function changePassword(req: Request, res: Response) {
+  try {
+    const idUsuario = Number(req.params.id_usuario)
+    const { currentPassword, newPassword } = req.body
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'La contraseña actual y la nueva son requeridas' })
+    }
+
+    const usuario = await usuarioService.changePassword(idUsuario, currentPassword, newPassword)
+    if (!usuario) return res.status(404).json({ message: 'Usuario not found' })
+    return res.status(200).json({ message: 'Contraseña actualizada' })
+  } catch (error) { return errorResponse(error, res) }
+}
+
 async function patch(req: Request, res: Response) {
   try {
     const usuario = await usuarioService.patch(Number(req.params.id_usuario), req.body)
@@ -80,6 +98,15 @@ async function remove(req: Request, res: Response) {
   } catch (error) { return errorResponse(error, res) }
 }
 
+async function removeCuenta(req: Request, res: Response) {
+  try {
+    const idUsuario = Number(req.params.id_usuario)
+    const usuario = await usuarioService.remove(idUsuario)
+    if (!usuario) return res.status(404).json({ message: 'Usuario not found' })
+    return res.status(200).json({ message: 'Cuenta removed' })
+  } catch (error) { return errorResponse(error, res) }
+}
+
 async function login(req: Request, res: Response) {
   try {
     const { nombre_usuario, contrasenia } = req.body
@@ -92,4 +119,4 @@ async function login(req: Request, res: Response) {
   } catch (error) { return errorResponse(error, res) }
 }
 
-export { findAll, findOne, add, update, patch, remove, login, registerDuenio, registerVeterinario }
+export { findAll, findOne, add, update, changePassword, patch, remove, removeCuenta, login, registerDuenio, registerVeterinario }

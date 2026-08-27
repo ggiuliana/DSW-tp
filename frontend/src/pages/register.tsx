@@ -130,12 +130,16 @@ function Register(){
                             <span>{errors.telefono.message as string}</span>
                         }
                     <input
-                        type="mail"
+                        type="email"
                         placeholder="Mail"
                         {...register("mail", {
                         required: {
                             value: true,
                             message: "El mail es obligatorio."
+                        },
+                        pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "El mail debe tener un formato válido, por ejemplo mail@mail.com."
                         }
                         })}
                         className="border-2 bg-violet-50 border-gray-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-violet-500 font-plusjakarta"

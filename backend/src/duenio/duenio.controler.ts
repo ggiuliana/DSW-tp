@@ -5,6 +5,9 @@ function responderError(error: unknown, res: Response) {
   if (error instanceof Error && error.message === 'MAIL_ALREADY_REGISTERED') {
     return res.status(409).json({ message: 'El mail ya está registrado' })
   }
+  if (error instanceof Error && error.message === 'INVALID_EMAIL_FORMAT') {
+    return res.status(400).json({ message: 'El mail debe tener un formato válido, por ejemplo mail@mail.com' })
+  }
 
   return res.status(500).json({
     message: error instanceof Error ? error.message : 'Error interno del servidor',

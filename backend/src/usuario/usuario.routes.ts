@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { findAll, findOne, add, update, patch, remove, login, registerDuenio, registerVeterinario } from './usuario.controler.js'
-import { verificarToken } from '../shared/auth.middleware.js'
+import { findAll, findOne, add, update, changePassword, patch, remove, removeCuenta, login, registerDuenio, registerVeterinario } from './usuario.controler.js'
+import { verificarCuentaPropia, verificarToken } from '../shared/auth.middleware.js'
 
 export const usuarioRouter = Router()
 
@@ -10,6 +10,8 @@ usuarioRouter.post('/login', login)
 usuarioRouter.post('/registro', registerDuenio)
 usuarioRouter.post('/registro-veterinario', verificarToken(['Administrador']), registerVeterinario)
 usuarioRouter.post('/:id_persona', add)
+usuarioRouter.delete('/cuenta/:id_usuario', verificarToken(), verificarCuentaPropia, removeCuenta)
+usuarioRouter.patch('/cuenta/:id_usuario/contrasenia', verificarToken(), verificarCuentaPropia, changePassword)
 usuarioRouter.put('/:id_usuario', verificarToken(['Administrador']), update)
 usuarioRouter.patch('/:id_usuario', verificarToken(['Administrador']), patch)
 usuarioRouter.delete('/:id_usuario', verificarToken(['Administrador']), remove)

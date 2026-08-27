@@ -34,3 +34,14 @@ export function verificarToken(rolesPermitidos?: string[]) {
         }
     }
 }
+
+export function verificarCuentaPropia(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const idUsuario = Number(req.params.id_usuario)
+    const idUsuarioAutenticado = Number(req.usuario?.sub)
+
+    if (!Number.isInteger(idUsuario) || idUsuarioAutenticado !== idUsuario) {
+        return res.status(403).json({ message: 'No puedes modificar otra cuenta' })
+    }
+
+    next()
+}
