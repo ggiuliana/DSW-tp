@@ -38,7 +38,7 @@ function PanelDuenio() {
     }
 
     return(
-        <main className="min-h-screen flex flex-col bg-purple-50 p-8 pt-28 lg:pl-72">
+        <main className="min-h-screen flex flex-col bg-purple-50 p-8 pb-28 pt-28 lg:pb-8 lg:pl-72">
             <header className="fixed top-0 left-0 right-0 z-50 flex h-20 items-center bg-white px-4 py-2 shadow-md">
                 <img src="/logoVet.png" alt="Logo de la veterinaria" className="absolute left-1/2 h-14 w-auto -translate-x-1/2 rounded-full object-contain"></img>
                 <button
@@ -49,7 +49,7 @@ function PanelDuenio() {
                     Cerrar sesión
                 </button>
             </header>
-            <div>
+            <div className="flex-1">
                 {renderContenido()}
             </div>
             <DuenioFooter />

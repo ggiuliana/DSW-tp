@@ -1,15 +1,15 @@
 import { NavLink } from "react-router-dom";
 
 const enlaces = [
-  { to: "/duenio", label: "Inicio", icono: "/icons/ingresar.png", end: true },
-  { to: "/duenio/mascotas", label: "Mascotas", icono: "/icons/botiquin.png" },
-  { to: "/duenio/turnos", label: "Turnos", icono: "/icons/jeringuilla.png" },
-  { to: "/duenio/perfil", label: "Perfil", icono: "/icons/escudo.png" },
+  { to: "/duenio", label: "Inicio", icono: "/icons/hogar.png", end: true },
+  { to: "/duenio/mascotas", label: "Mascotas", icono: "/icons/pata.png" },
+  { to: "/duenio/turnos", label: "Turnos", icono: "/icons/agenda.png" },
+  { to: "/duenio/perfil", label: "Perfil", icono: "/icons/usuario.png" },
 ];
 
 function DuenioFooter() {
   return (
-    <footer className="mt-auto rounded-2xl border-violet-200 bg-white px-4 py-3 shadow-2xl lg:fixed lg:top-20 lg:bottom-0 lg:left-0 lg:z-40 lg:mt-0 lg:flex lg:w-64 lg:flex-col lg:rounded-none lg:border-r lg:px-5 lg:py-8 lg:shadow-lg">
+    <footer className="fixed inset-x-0 bottom-0 z-40 w-full border-t border-violet-200 bg-white px-4 py-3 shadow-2xl lg:inset-x-auto lg:top-20 lg:left-0 lg:bottom-0 lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:px-5 lg:py-8 lg:shadow-lg">
       <nav aria-label="Navegación del panel" className="mx-auto flex max-w-xl justify-around gap-2 lg:w-full lg:flex-col lg:gap-3">
         {enlaces.map(({ to, label, icono, end }) => (
           <NavLink

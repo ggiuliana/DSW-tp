@@ -43,3 +43,12 @@ body {
   font-family: var(--font-plusjakarta2);
   overflow-x: hidden;
 }
+
+input.fecha-nacimiento-vacia::-webkit-datetime-edit,
+input.fecha-nacimiento-vacia::-webkit-datetime-edit-text,
+input.fecha-nacimiento-vacia::-webkit-datetime-edit-month-field,
+input.fecha-nacimiento-vacia::-webkit-datetime-edit-day-field,
+input.fecha-nacimiento-vacia::-webkit-datetime-edit-year-field {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
