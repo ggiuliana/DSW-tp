@@ -1,0 +1,46 @@
+GET http://localhost:3000/api/proveedor
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4Mzc5Nzk0LCJleHAiOjE3ODgzODY5OTR9.tBZINLmK6Nm1dqj2F9MOS0Zz8D1-fH5LuS2Ht1s45XI
+
+### obtener una proveedor por id
+GET http://localhost:3000/api/proveedor/3
+
+### crear un nuevo proveedor
+POST http://localhost:3000/api/proveedor
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4Mzc5Nzk0LCJleHAiOjE3ODgzODY5OTR9.tBZINLmK6Nm1dqj2F9MOS0Zz8D1-fH5LuS2Ht1s45XI
+
+{
+  "nombre_proveedor": "ecografia",
+  "cuit": "30-12345678-9",
+  "telefono_proveedor": "011-12345678",
+  "mail_proveedor": "ecografia@proveedor.com",
+  "razon_social": "EcoGrafia S.A.",
+  "direccion_proveedor": "Calle Falsa 123"
+}
+
+### modificar un proveedor (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/proveedor/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4Mzc5Nzk0LCJleHAiOjE3ODgzODY5OTR9.tBZINLmK6Nm1dqj2F9MOS0Zz8D1-fH5LuS2Ht1s45XI
+
+{
+  "nombre_proveedor": "amasalamasa",
+  "cuit": "30-1234",
+  "telefono_proveedor": "011-12345678",
+  "mail_proveedor": "ecografia@proveedor.com",
+  "razon_social": "EcoGrafia S.A.",
+  "direccion_proveedor": "Calle Falsa 123"
+}
+
+### modificar un proveedor (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/proveedor/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4Mzc5Nzk0LCJleHAiOjE3ODgzODY5OTR9.tBZINLmK6Nm1dqj2F9MOS0Zz8D1-fH5LuS2Ht1s45XI
+
+{
+  "nombre_proveedor": "modificada"
+}
+
+### borrar un proveedor
+DELETE http://localhost:3000/api/proveedor/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4Mzc5Nzk0LCJleHAiOjE3ODgzODY5OTR9.tBZINLmK6Nm1dqj2F9MOS0Zz8D1-fH5LuS2Ht1s45XI

@@ -4,6 +4,7 @@ import cors from 'cors'
 import { mascotaRouter } from './mascota/mascota.routes.js'
 import { duenioRouter } from './duenio/duenio.routes.js'
 import { usuarioRouter } from './usuario/usuario.routes.js'
+import { proveedorRouter } from './proveedor/proveedor.routes.js'
 import { veterinarioRouter } from './veterinario/veterinario.routes.js'
 import { estudioRouter } from './estudio/estudio.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
@@ -27,6 +28,7 @@ app.use('/api/duenio', duenioRouter)
 app.use('/api/usuario', usuarioRouter)
 app.use('/api/veterinario', veterinarioRouter)
 app.use('/api/estudio', estudioRouter)
+app.use('/api/proveedor', proveedorRouter)
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
