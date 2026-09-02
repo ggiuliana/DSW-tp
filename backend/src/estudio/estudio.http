@@ -1,0 +1,39 @@
+GET http://localhost:3000/api/estudio
+
+### obtener una estudio por id
+GET http://localhost:3000/api/estudio/3
+
+### crear un nuevo estudio
+POST http://localhost:3000/api/estudio
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4MzcxMzAxLCJleHAiOjE3ODgzNzg1MDF9._OOonJA0P7mtJDWP2ek2lfDKlAYxd_dbwod7akhz9Fc
+
+{
+  "nombre_estudio": "ecografia",
+  "descripcion_estudio": "Estudio por imagen para observar organos y estructuras de la cavidad abdominal.",
+  "precio_estudio": 22000
+}
+
+### modificar un estudio (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/estudio/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4MzcxMzAxLCJleHAiOjE3ODgzNzg1MDF9._OOonJA0P7mtJDWP2ek2lfDKlAYxd_dbwod7akhz9Fc
+
+{
+  "nombre_estudio": "amasalamasa",
+  "descripcion_estudio": "abdominal.",
+  "precio_estudio": 1
+}
+
+### modificar un estudio (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/estudio/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4MzcxMzAxLCJleHAiOjE3ODgzNzg1MDF9._OOonJA0P7mtJDWP2ek2lfDKlAYxd_dbwod7akhz9Fc
+
+{
+  "descripcion_estudio": "modificada"
+}
+
+### borrar un estudio
+DELETE http://localhost:3000/api/estudio/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsIm5vbWJyZV91c3VhcmlvIjoiYWRtaW4iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIiwiaWF0IjoxNzg4MzcxMzAxLCJleHAiOjE3ODgzNzg1MDF9._OOonJA0P7mtJDWP2ek2lfDKlAYxd_dbwod7akhz9Fc
