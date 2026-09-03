@@ -10,6 +10,7 @@ import { estudioRouter } from './estudio/estudio.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
+import { errorHandler, notFoundHandler } from './shared/error.middleware.js'
 
 const app = express()
 
@@ -30,9 +31,8 @@ app.use('/api/veterinario', veterinarioRouter)
 app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
 
-app.use((_, res) => {
-  return res.status(404).send({ message: 'Resource not found' })
-})
+app.use(notFoundHandler)
+app.use(errorHandler)
 
 await syncSchema()
 await orm.getSeeder().seed(DatabaseSeeder)
