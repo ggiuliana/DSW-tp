@@ -4,10 +4,10 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 export const jwtSecret = process.env.JWT_SECRET || 'clave-secreta-desarrollo'
 
 export interface AuthenticatedRequest extends Request {
-    usuario?: JwtPayload
+    usuario?: JwtPayload & { permisos?: string[] }
 }
 
-export function verificarToken(rolesPermitidos?: string[]) {
+export function verificarToken(permisosRequeridos?: string[]) {
     return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
         const encabezado = req.headers.authorization
         const [tipo, token] = encabezado?.split(' ') ?? []
@@ -23,11 +23,13 @@ export function verificarToken(rolesPermitidos?: string[]) {
                 return res.status(401).json({ message: 'Token inválido' })
             }
 
-            if (rolesPermitidos && !rolesPermitidos.includes(payload.rol as string)) {
+            const permisosUsuario = (payload as JwtPayload & { permisos?: unknown }).permisos
+            if (permisosRequeridos && (!Array.isArray(permisosUsuario) ||
+                !permisosRequeridos.every((permiso) => permisosUsuario.includes(permiso)))) {
                 return res.status(403).json({ message: 'No tienes permisos para esta ruta' })
             }
 
-            req.usuario = payload
+            req.usuario = payload as JwtPayload & { permisos?: string[] }
             next()
         } catch {
             return res.status(401).json({ message: 'Token inválido o expirado' })

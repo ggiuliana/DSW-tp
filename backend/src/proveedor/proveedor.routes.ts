@@ -4,9 +4,9 @@ import { findAll, findOne, add, update, patch, remove } from './proveedor.contro
 
 export const proveedorRouter = Router()
 
-proveedorRouter.get('/', verificarToken(['Administrador']), findAll)
-proveedorRouter.get('/:id_proveedor', verificarToken(['Administrador']), findOne)
-proveedorRouter.post('/',verificarToken(['Administrador']), add)
-proveedorRouter.put('/:id_proveedor',verificarToken(['Administrador']), update)
-proveedorRouter.patch('/:id_proveedor',verificarToken(['Administrador']), patch)
-proveedorRouter.delete('/:id_proveedor',verificarToken(['Administrador']), remove)
+proveedorRouter.get('/', verificarToken(['proveedores:Leer']), findAll)
+proveedorRouter.get('/:id_proveedor', verificarToken(['proveedores:Leer']), findOne)
+proveedorRouter.post('/', verificarToken(['proveedores:Agregar']), add)
+proveedorRouter.put('/:id_proveedor', verificarToken(['proveedores:Actualizar']), update)
+proveedorRouter.patch('/:id_proveedor', verificarToken(['proveedores:Actualizar']), patch)
+proveedorRouter.delete('/:id_proveedor', verificarToken(['proveedores:Eliminar']), remove)

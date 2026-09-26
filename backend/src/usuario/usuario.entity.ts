@@ -1,6 +1,6 @@
 import {Entity, PrimaryKey, Property, OneToOne, ManyToOne} from "@mikro-orm/core"
 import {Persona} from "../persona/persona.entity.js"
-import {Rol} from "../rol/rol.entity.js"
+import {Grupo_Permiso} from "../grupo_permiso/grupo_permiso.entity.js"
 
 @Entity()
 export class Usuario {
@@ -23,6 +23,6 @@ export class Usuario {
     @OneToOne(() => Persona, {nullable: true, onDelete: 'cascade'})
     persona?: Persona
 
-    @ManyToOne(() => Rol, {nullable: true, onDelete: "set null"})
-    rol?: Rol;
+    @ManyToOne(() => Grupo_Permiso, {nullable: true, onDelete: "set null"})
+    grupo?: Grupo_Permiso;
 }

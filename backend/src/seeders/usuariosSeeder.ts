@@ -1,6 +1,6 @@
 import { Seeder } from '@mikro-orm/seeder';
 import { Usuario } from '../usuario/usuario.entity.js';
-import { Rol } from '../rol/rol.entity.js';
+import { Grupo_Permiso } from '../grupo_permiso/grupo_permiso.entity.js';
 
 export class UsuariosSeeder extends Seeder {
 
@@ -10,15 +10,15 @@ export class UsuariosSeeder extends Seeder {
             return;
         }
 
-        const rolAdministrador = await em.findOneOrFail(Rol, {
-            nombre_rol: 'Administrador'
+        const grupoAdministrador = await em.findOneOrFail(Grupo_Permiso, {
+            nombre_grupo: 'Administrador'
         });
 
         em.create(Usuario, {
             nombre_usuario: 'admin',
             contrasenia: "admin123",
             estado: "Activo",
-            rol: rolAdministrador
+            grupo: grupoAdministrador
         });
 
         await em.flush();

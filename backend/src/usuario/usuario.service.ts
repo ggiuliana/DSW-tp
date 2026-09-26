@@ -56,19 +56,19 @@ export class UsuarioService {
       throw new Error('PERSONA_ALREADY_HAS_USER')
     }
 
-    const rolNombre = persona instanceof Duenio
+    const grupoNombre = persona instanceof Duenio
       ? 'Duenio'
       : persona instanceof Veterinario ? 'Veterinario' : null
-    if (!rolNombre) throw new Error('INVALID_PERSONA_TYPE')
+    if (!grupoNombre) throw new Error('INVALID_PERSONA_TYPE')
 
-    const rol = await usuarioRepository.findRolByNombre(rolNombre)
-    if (!rol) throw new Error('ROLE_NOT_FOUND')
+    const grupo = await usuarioRepository.findGrupoByNombre(grupoNombre)
+    if (!grupo) throw new Error('GROUP_NOT_FOUND')
 
     return usuarioRepository.save(usuarioRepository.create({
       ...data,
       nombre_usuario,
       persona,
-      rol,
+      grupo,
     }))
   }
 
@@ -83,14 +83,14 @@ export class UsuarioService {
     if (personaExistente) throw new Error('MAIL_ALREADY_REGISTERED')
     if (usuarioExistente) throw new Error('USERNAME_ALREADY_REGISTERED')
 
-    const rol = await usuarioRepository.findRolByNombre('Duenio')
-    if (!rol) throw new Error('ROLE_NOT_FOUND')
+    const grupo = await usuarioRepository.findGrupoByNombre('Duenio')
+    if (!grupo) throw new Error('GROUP_NOT_FOUND')
 
     const { nombre, apellido, telefono, dni, direccion } = data
     return usuarioRepository.registerDuenio(
       { nombre, apellido, telefono, mail, dni, direccion },
       { nombre_usuario, contrasenia: data.contrasenia, estado: 'Activo' },
-      rol,
+      grupo
     )
   }
 
@@ -105,14 +105,14 @@ export class UsuarioService {
     if (personaExistente) throw new Error('MAIL_ALREADY_REGISTERED')
     if (usuarioExistente) throw new Error('USERNAME_ALREADY_REGISTERED')
 
-    const rol = await usuarioRepository.findRolByNombre('Veterinario')
-    if (!rol) throw new Error('ROLE_NOT_FOUND')
+    const grupo = await usuarioRepository.findGrupoByNombre('Veterinario')
+    if (!grupo) throw new Error('GROUP_NOT_FOUND')
 
     const { nombre, apellido, telefono, dni, direccion, matricula, especialidad } = data
     return usuarioRepository.registerVeterinario(
       { nombre, apellido, telefono, mail, dni, direccion, matricula, especialidad },
       { nombre_usuario, contrasenia: data.contrasenia, estado: 'Activo' },
-      rol,
+      grupo
     )
   }
 
@@ -156,7 +156,11 @@ export class UsuarioService {
     const token = jwt.sign({
       sub: usuario.id_usuario,
       nombre_usuario: usuario.nombre_usuario,
-      rol: usuario.rol?.nombre_rol,
+      permisos: usuario.grupo?.activo
+        ? usuario.grupo.permisos.getItems()
+          .filter((permiso) => permiso.activo)
+          .map((permiso) => `${permiso.categoria}:${permiso.nombre_permiso}`)
+        : [],
     }, jwtSecret, { expiresIn: '2h' })
     return { usuario, token }
   }
