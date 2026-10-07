@@ -7,6 +7,7 @@ import { usuarioRouter } from './usuario/usuario.routes.js'
 import { proveedorRouter } from './proveedor/proveedor.routes.js'
 import { veterinarioRouter } from './veterinario/veterinario.routes.js'
 import { estudioRouter } from './estudio/estudio.routes.js'
+import { medicamentoRouter } from './medicamento/medicamento.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
@@ -30,6 +31,7 @@ app.use('/api/usuario', usuarioRouter)
 app.use('/api/veterinario', veterinarioRouter)
 app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
+app.use('/api/medicamento', medicamentoRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
