@@ -1,5 +1,6 @@
-import { Entity, PrimaryKey, ManyToOne, Property } from '@mikro-orm/core';
+import { Collection, Entity, OneToMany, PrimaryKey, ManyToOne, Property } from '@mikro-orm/core';
 import { Duenio } from '../duenio/duenio.entity.js';
+import { Vacuna } from '../vacuna/vacuna.entity.js';
 
 @Entity()
 export class Mascota {
@@ -26,4 +27,7 @@ export class Mascota {
 
     @ManyToOne(() => Duenio, {nullable: true, onDelete: 'set null'})
     duenio?: Duenio;
+
+    @OneToMany(() => Vacuna, (vacuna) => vacuna.mascota, { orphanRemoval: true })
+    vacunas = new Collection<Vacuna>(this);
 }

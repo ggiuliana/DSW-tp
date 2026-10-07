@@ -20,6 +20,7 @@ const errorDefinitions: Record<string, ErrorDefinition> = {
   ESTUDIO_NOT_FOUND: { status: 404, message: 'No se encontró el estudio' },
   PROVEEDOR_NOT_FOUND: { status: 404, message: 'No se encontró el proveedor' },
   MEDICAMENTO_NOT_FOUND: { status: 404, message: 'No se encontró el medicamento' },
+  TIPO_VACUNA_NOT_FOUND: { status: 404, message: 'No se encontró el tipo de vacuna' },
   MASCOTA_NOT_FOUND: { status: 404, message: 'No se encontró la mascota' },
   VETERINARIO_NOT_FOUND: { status: 404, message: 'No se encontró el veterinario' },
   REQUIRED_PASSWORDS: { status: 400, message: 'La contraseña actual y la nueva son requeridas' },

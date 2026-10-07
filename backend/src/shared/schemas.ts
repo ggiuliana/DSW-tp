@@ -28,6 +28,19 @@ const mascotaFields = {
   castrado: z.boolean(),
   sexo: requiredText.max(1),
   fechaNac: z.string().refine((value) => !Number.isNaN(Date.parse(value)), 'Fecha inválida').transform((value) => new Date(value)),
+  vacunas: z.array(z.object({
+    id_tipo_vacuna: z.coerce.number().int().positive(),
+    fecha_aplicacion: z.iso.date().transform((value) => new Date(`${value}T00:00:00.000Z`)),
+  })).superRefine((vacunas, context) => {
+    const claves = new Set<string>()
+    vacunas.forEach((vacuna, index) => {
+      const clave = `${vacuna.id_tipo_vacuna}:${vacuna.fecha_aplicacion.toISOString().slice(0, 10)}`
+      if (claves.has(clave)) {
+        context.addIssue({ code: 'custom', path: [index], message: 'La vacuna ya está incluida para esa fecha' })
+      }
+      claves.add(clave)
+    })
+  }).optional(),
 }
 
 export const mascotaSchema = z.object(mascotaFields)
@@ -53,6 +66,14 @@ const estudioFields = {
 
 export const estudioSchema = z.object(estudioFields)
 export const estudioPatchSchema = nonEmptyPatch(estudioSchema.partial())
+
+const tipoVacunaFields = {
+  nombre_tipo_vacuna: requiredText.max(30),
+  descripcion_tipo_vacuna: requiredText.max(200),
+}
+
+export const tipoVacunaSchema = z.object(tipoVacunaFields)
+export const tipoVacunaPatchSchema = nonEmptyPatch(tipoVacunaSchema.partial())
 
 const medicamentoFields = {
   nombre_medicamento: requiredText.max(30),

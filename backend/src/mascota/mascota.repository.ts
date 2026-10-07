@@ -7,15 +7,15 @@ type MascotaCreateData = Pick<Mascota, 'nombre_mascota' | 'especie' | 'raza' | '
 
 export class MascotaRepository {
   findAll() {
-    return em.find(Mascota, {})
+    return em.find(Mascota, {}, { populate: ['vacunas', 'vacunas.tipo_vacuna'] })
   }
 
   findById(id: number) {
-    return em.findOne(Mascota, { id_mascota: id })
+    return em.findOne(Mascota, { id_mascota: id }, { populate: ['vacunas', 'vacunas.tipo_vacuna'] })
   }
 
   async findByDuenio(duenio: Duenio) {
-    return em.find(Mascota, {duenio})
+    return em.find(Mascota, { duenio }, { populate: ['vacunas', 'vacunas.tipo_vacuna'] })
   }
 
   create(data: MascotaCreateData) {

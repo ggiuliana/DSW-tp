@@ -8,6 +8,7 @@ import { proveedorRouter } from './proveedor/proveedor.routes.js'
 import { veterinarioRouter } from './veterinario/veterinario.routes.js'
 import { estudioRouter } from './estudio/estudio.routes.js'
 import { medicamentoRouter } from './medicamento/medicamento.routes.js'
+import { tipoVacunaRouter } from './tipo_vacuna/tipo_vacuna.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
@@ -32,6 +33,7 @@ app.use('/api/veterinario', veterinarioRouter)
 app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
 app.use('/api/medicamento', medicamentoRouter)
+app.use('/api/tipo_vacuna', tipoVacunaRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
