@@ -1,18 +1,19 @@
 import 'reflect-metadata'
 import express from 'express'
 import cors from 'cors'
-import { mascotaRouter } from './mascota/mascota.routes.js'
-import { duenioRouter } from './duenio/duenio.routes.js'
-import { usuarioRouter } from './usuario/usuario.routes.js'
-import { proveedorRouter } from './proveedor/proveedor.routes.js'
-import { veterinarioRouter } from './veterinario/veterinario.routes.js'
-import { estudioRouter } from './estudio/estudio.routes.js'
-import { medicamentoRouter } from './medicamento/medicamento.routes.js'
-import { tipoVacunaRouter } from './tipo_vacuna/tipo_vacuna.routes.js'
-import { orm, syncSchema } from './shared/db/orm.js'
+import { mascotaRouter } from './routers/mascota.routes.js'
+import { duenioRouter } from './routers/duenio.routes.js'
+import { usuarioRouter } from './routers/usuario.routes.js'
+import { proveedorRouter } from './routers/proveedor.routes.js'
+import { veterinarioRouter } from './routers/veterinario.routes.js'
+import { estudioRouter } from './routers/estudio.routes.js'
+import { medicamentoRouter } from './routers/medicamento.routes.js'
+import { tipoVacunaRouter } from './routers/tipo_vacuna.routes.js'
+import { consultaRouter } from './routers/consulta.routes.js'
+import { orm, syncSchema } from './configs/db/orm.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
-import { errorHandler, notFoundHandler } from './shared/error.middleware.js'
+import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js'
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
 app.use('/api/medicamento', medicamentoRouter)
 app.use('/api/tipo_vacuna', tipoVacunaRouter)
+app.use('/api/consulta', consultaRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)

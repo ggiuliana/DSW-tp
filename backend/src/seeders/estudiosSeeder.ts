@@ -1,5 +1,5 @@
 import { Seeder } from '@mikro-orm/seeder'
-import { Estudio } from '../estudio/estudio.entity.js'
+import { Estudio } from '../entities/estudio.entity.js'
 
 export class EstudiosSeeder extends Seeder {
 	async run(em: any): Promise<void> {

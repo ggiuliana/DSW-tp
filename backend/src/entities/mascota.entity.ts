@@ -1,0 +1,33 @@
+import { Collection, Entity, OneToMany, PrimaryKey, ManyToOne, Property } from '@mikro-orm/core';
+import { Duenio } from './duenio.entity.js';
+import { Vacuna } from './vacuna.entity.js';
+
+@Entity()
+export class Mascota {
+    @PrimaryKey({ autoincrement: true })
+    id_mascota?: number
+    
+    @Property({ length: 50 })
+    nombre_mascota!: string
+
+    @Property({ length: 30 })
+    especie!: string
+
+    @Property({ length: 30 })
+    raza!: string
+
+    @Property()
+    castrado!: boolean
+
+    @Property({ length: 1 })
+    sexo!: string
+
+    @Property()
+    fechaNac!: Date
+
+    @ManyToOne(() => Duenio, {nullable: true, onDelete: 'set null'})
+    duenio?: Duenio;
+
+    @OneToMany(() => Vacuna, (vacuna) => vacuna.mascota, { orphanRemoval: true })
+    vacunas = new Collection<Vacuna>(this);
+}

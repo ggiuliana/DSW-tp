@@ -1,7 +1,7 @@
 import { Seeder } from '@mikro-orm/seeder';
 import { EntityManager } from '@mikro-orm/core';
-import { Permiso } from '../permiso/permiso.entity.js';
-import { Grupo_Permiso } from '../grupo_permiso/grupo_permiso.entity.js';
+import { Permiso } from '../entities/permiso.entity.js';
+import { Grupo_Permiso } from '../entities/grupo_permiso.entity.js';
 
 export class GrupoPermisoSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
