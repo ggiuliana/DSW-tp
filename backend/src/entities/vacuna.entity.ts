@@ -1,11 +1,11 @@
-import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core'
-import { Mascota } from './mascota.entity.js'
+import { Entity, ManyToOne, PrimaryKey, type Rel } from '@mikro-orm/core'
+import type { Mascota } from './mascota.entity.js'
 import { TipoVacuna } from './tipo_vacuna.entity.js'
 
 @Entity()
 export class Vacuna {
-  @ManyToOne(() => Mascota, { primary: true, onDelete: 'cascade' })
-  mascota!: Mascota
+  @ManyToOne(() => 'Mascota', { inversedBy: 'vacunas', primary: true, onDelete: 'cascade' })
+  mascota!: Rel<Mascota> & object
 
   @ManyToOne(() => TipoVacuna, { primary: true })
   tipo_vacuna!: TipoVacuna

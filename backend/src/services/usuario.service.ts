@@ -156,6 +156,7 @@ export class UsuarioService {
     const token = jwt.sign({
       sub: usuario.id_usuario,
       nombre_usuario: usuario.nombre_usuario,
+      rol: usuario.grupo?.nombre_grupo,
       permisos: usuario.grupo?.activo
         ? usuario.grupo.permisos.getItems()
           .filter((permiso) => permiso.activo)

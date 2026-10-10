@@ -1,12 +1,14 @@
 import DuenioFooter from "../components/dueniofooter";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import VerMascotas from "./mascotasduenio";
 import VerPerfil from "./perfilduenio.tsx"
+import HistoriaClinica from "./historiaclinica";
 
 function PanelDuenio() {
     const nombre = localStorage.getItem("nombrePersona") || "usuario";
     const { pathname } = useLocation();
+    const { id_mascota } = useParams();
 
     const navigate = useNavigate()
     const logOut = () => {
@@ -18,6 +20,10 @@ function PanelDuenio() {
     };
 
     function renderContenido() {
+        if (pathname.startsWith("/duenio/mascotas/") && id_mascota) {
+            return <HistoriaClinica idMascota={id_mascota} />;
+        }
+
         switch (pathname) {
             case "/duenio/mascotas":
                 return <VerMascotas />;

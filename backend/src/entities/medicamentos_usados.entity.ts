@@ -5,7 +5,7 @@ import { Medicamento } from './medicamento.entity.js';
 @Entity()
 export class MedicamentosUsados {
     @ManyToOne(() => Consulta, { primary: true, onDelete: 'cascade' })
-    consulta!: Consulta;
+    consulta!: Consulta & object;
 
     @ManyToOne(() => Medicamento, { primary: true, onDelete: 'cascade' })
     medicamento!: Medicamento;

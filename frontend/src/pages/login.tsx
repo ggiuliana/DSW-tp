@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface LoginForm {
     nombre_usuario: string;
@@ -11,54 +12,81 @@ interface LoginResponse {
         token: string;
         usuario: {
             nombre_usuario: string;
+            grupo?: {
+                nombre_grupo: string;
+            };
             persona?: {
                 nombre: string;
                 id_persona?: number;
             };
-            rol?: {
-                nombre_rol: string;
-            };
         };
     };
-    message: string;
+    message?: string;
+}
+
+function obtenerRolDelToken(token: string): string | undefined {
+    try {
+        const payloadCodificado = token.split(".")[1];
+        if (!payloadCodificado) return undefined;
+
+        const payload = JSON.parse(
+            atob(payloadCodificado.replace(/-/g, "+").replace(/_/g, "/"))
+        ) as { rol?: unknown };
+
+        return typeof payload.rol === "string" ? payload.rol : undefined;
+    } catch {
+        return undefined;
+    }
 }
 
 function Login(){
     const navigate = useNavigate();
+    const [errorEnvio, setErrorEnvio] = useState("");
 
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors, isSubmitting }
     } = useForm<LoginForm>();
 
     const onSubmit = async (data: LoginForm) => {
-        const response = await fetch("http://localhost:3000/api/usuario/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-        const resultado: LoginResponse = await response.json();
-        if (!response.ok || !resultado.data) {
-            alert(resultado.message);
-            return;
+        setErrorEnvio("");
+        try {
+            const response = await fetch("http://localhost:3000/api/usuario/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            const resultado: LoginResponse = await response.json();
+            if (!response.ok || !resultado.data) {
+                setErrorEnvio(resultado.message ?? "No se pudo iniciar sesión.");
+                return;
+            }
+            const { token, usuario } = resultado.data;
+            const rol = usuario.grupo?.nombre_grupo ?? obtenerRolDelToken(token);
+            const rutasPorRol: Record<string, string> = {
+                Duenio: "/duenio",
+                Veterinario: "/veterinario",
+                Administrador: "/administrador"
+            };
+            const ruta = rutasPorRol[rol ?? ""];
+            if (!ruta) {
+                setErrorEnvio(`No se reconoce el rol de esta cuenta: ${rol ?? "sin rol"}.`);
+                return;
+            }
+
+            localStorage.setItem("token", token);
+            localStorage.setItem("usuario", JSON.stringify(usuario));
+            localStorage.setItem("nombrePersona", usuario.persona?.nombre ?? "");
+            if (usuario.persona?.id_persona !== undefined) {
+                localStorage.setItem("idPersona", String(usuario.persona.id_persona));
+            }
+            navigate(ruta);
+        } catch {
+            setErrorEnvio("No se pudo conectar con el servidor. Verifica que el backend esté activo y que uses http://localhost:5173.");
         }
-        const { token, usuario } = resultado.data;
-        const rol = usuario.rol?.nombre_rol;
-        localStorage.setItem("token", token);
-        localStorage.setItem("usuario", JSON.stringify(usuario));
-        localStorage.setItem("nombrePersona", usuario.persona?.nombre ?? "");
-        if (usuario.persona?.id_persona !== undefined) {
-            localStorage.setItem("idPersona", String(usuario.persona.id_persona));
-        }
-        const rutasPorRol: Record<string, string> = {
-            Duenio: "/duenio",
-            Veterinario: "/veterinario",
-            Administrador: "/administrador"
-        };
-        navigate(rutasPorRol[rol ?? ""] ?? "/");
     };
     
     return(
@@ -87,8 +115,10 @@ function Login(){
                 </p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col gap-4">
+                    {errorEnvio && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{errorEnvio}</p>}
                     <input
-                        type="user"
+                        type="text"
+                        autoComplete="username"
                         placeholder="Nombre de usuario"
                         {...register("nombre_usuario", {
                         required: {
@@ -103,6 +133,7 @@ function Login(){
                         }
                     <input
                         type="password"
+                        autoComplete="current-password"
                         placeholder="Contraseña"
                         {...register("contrasenia", {
                         required: {
@@ -128,9 +159,10 @@ function Login(){
                     <div className="flex justify-end">
                         <button
                             type="submit"
-                            className="rounded-full bg-purple-950 px-4 py-2 font-plusjakarta2 text-violet-200 hover:bg-violet-900"
+                            disabled={isSubmitting}
+                            className="rounded-full bg-purple-950 px-4 py-2 font-plusjakarta2 text-violet-200 hover:bg-violet-900 disabled:cursor-wait disabled:opacity-60"
                         >
-                            Ingresar
+                            {isSubmitting ? "Ingresando..." : "Ingresar"}
                         </button>
                     </div>
                 </form>

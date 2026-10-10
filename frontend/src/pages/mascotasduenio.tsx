@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface Mascota {
     id_mascota: number;
@@ -8,7 +9,25 @@ interface Mascota {
     raza: string;
     castrado: boolean;
     sexo: string;
-    fechaNac: Date
+    fechaNac: string;
+    vacunas?: VacunaAplicada[];
+}
+
+interface VacunaAplicada {
+    tipo_vacuna: TipoVacuna;
+    fecha_aplicacion: string;
+}
+
+interface TipoVacuna {
+    id_tipo_vacuna: number;
+    nombre_tipo_vacuna: string;
+    descripcion_tipo_vacuna: string;
+}
+
+interface VacunaFormulario {
+    clave: number;
+    id_tipo_vacuna: string;
+    fecha_aplicacion: string;
 }
 
 type MascotaFormData = Omit<Mascota, "id_mascota" | "fechaNac"> & {
@@ -29,12 +48,18 @@ function formatearFechaParaInput(fechaNac: Mascota["fechaNac"]) {
 }
 
 function VerMascotas() {
+    const navigate = useNavigate();
     const [mascotas, setMascotas] = useState<Mascota[]>([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [mascotaEnEdicion, setMascotaEnEdicion] = useState<Mascota | null>(null);
+    const [mascotaParaVacunas, setMascotaParaVacunas] = useState<Mascota | null>(null);
     const [mascotaAEliminar, setMascotaAEliminar] = useState<Mascota | null>(null);
+    const [pasoFormulario, setPasoFormulario] = useState<1 | 2>(1);
+    const [tiposVacuna, setTiposVacuna] = useState<TipoVacuna[]>([]);
+    const [vacunasFormulario, setVacunasFormulario] = useState<VacunaFormulario[]>([]);
+    const [cargandoTipos, setCargandoTipos] = useState(false);
     const { register, handleSubmit, reset, control } = useForm<MascotaFormData>();
     const fechaNacSeleccionada = useWatch({ control, name: "fechaNac" });
 
@@ -61,6 +86,34 @@ function VerMascotas() {
     }, []);
 
     useEffect(() => {
+        if (!mostrarFormulario || pasoFormulario !== 2) return;
+
+        let cancelado = false;
+        const cargarTiposVacuna = async () => {
+            setCargandoTipos(true);
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("La sesión expiró. Inicia sesión nuevamente.");
+
+            const response = await fetch("http://localhost:3000/api/tipo_vacuna", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const resultado = await response.json();
+            if (!response.ok) throw new Error(resultado.message || "No se pudieron cargar los tipos de vacuna.");
+            if (!cancelado) setTiposVacuna(resultado.data as TipoVacuna[]);
+        };
+
+        cargarTiposVacuna()
+            .catch((err: Error) => {
+                if (!cancelado) setError(err.message);
+            })
+            .finally(() => {
+                if (!cancelado) setCargandoTipos(false);
+            });
+
+        return () => { cancelado = true; };
+    }, [mostrarFormulario, pasoFormulario]);
+
+    useEffect(() => {
         if (!mascotaEnEdicion) return;
 
         reset({
@@ -74,7 +127,6 @@ function VerMascotas() {
     }, [mascotaEnEdicion, reset]);
 
     if (cargando) return <p>Cargando mascotas...</p>;
-    if (error) return <p>{error}</p>;
 
     const ahora = new Date();
     const fechaMaxima = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}-${String(ahora.getDate()).padStart(2, "0")}`;
@@ -82,6 +134,9 @@ function VerMascotas() {
     const cerrarFormulario = () => {
         setMostrarFormulario(false);
         setMascotaEnEdicion(null);
+        setMascotaParaVacunas(null);
+        setPasoFormulario(1);
+        setVacunasFormulario([]);
         reset();
     };
 
@@ -91,7 +146,11 @@ function VerMascotas() {
     };
 
     const abrirFormularioAgregar = () => {
+        setError("");
         setMascotaEnEdicion(null);
+        setMascotaParaVacunas(null);
+        setPasoFormulario(1);
+        setVacunasFormulario([]);
         reset({
             nombre_mascota: "",
             especie: "",
@@ -103,7 +162,7 @@ function VerMascotas() {
         setMostrarFormulario(true);
     };
 
-    const guardarMascota = async (data: MascotaFormData) => {
+    const guardarDatosMascota = async (data: MascotaFormData) => {
         const idDuenio = localStorage.getItem("idPersona");
         if (!idDuenio) return;
 
@@ -125,10 +184,66 @@ function VerMascotas() {
             return;
         }
 
+        const mascotaGuardada = resultado.data as Mascota;
         setMascotas((actuales) => editando
-            ? actuales.map((mascota) => mascota.id_mascota === resultado.data.id_mascota ? resultado.data : mascota)
-            : [...actuales, resultado.data]);
+            ? actuales.map((mascota) => mascota.id_mascota === mascotaGuardada.id_mascota ? mascotaGuardada : mascota)
+            : [...actuales, mascotaGuardada]);
+        setMascotaParaVacunas(mascotaGuardada);
+        setVacunasFormulario((mascotaEnEdicion?.vacunas ?? []).map((vacuna, indice) => ({
+            clave: Date.now() + indice,
+            id_tipo_vacuna: String(vacuna.tipo_vacuna.id_tipo_vacuna),
+            fecha_aplicacion: formatearFechaParaInput(vacuna.fecha_aplicacion),
+        })));
+        setError("");
+        setPasoFormulario(2);
+    };
+
+    const guardarVacunas = async () => {
+        if (!mascotaParaVacunas) return;
+        const incompleta = vacunasFormulario.some((vacuna) =>
+            Boolean(vacuna.id_tipo_vacuna) !== Boolean(vacuna.fecha_aplicacion)
+        );
+        if (incompleta) {
+            setError("Completa el tipo y la fecha de cada vacuna o elimina la fila vacía.");
+            return;
+        }
+
+        const vacunas = vacunasFormulario
+            .filter((vacuna) => vacuna.id_tipo_vacuna && vacuna.fecha_aplicacion)
+            .map((vacuna) => ({
+                id_tipo_vacuna: Number(vacuna.id_tipo_vacuna),
+                fecha_aplicacion: vacuna.fecha_aplicacion,
+            }));
+        const response = await fetch(`http://localhost:3000/api/mascota/${mascotaParaVacunas.id_mascota}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ vacunas }),
+        });
+        const resultado = await response.json();
+        if (!response.ok) {
+            setError(resultado.message || "No se pudieron guardar las vacunas.");
+            return;
+        }
+
+        const mascotaActualizada: Mascota = {
+            ...mascotaParaVacunas,
+            vacunas: vacunas.map((vacuna) => ({
+                tipo_vacuna: tiposVacuna.find((tipo) => tipo.id_tipo_vacuna === vacuna.id_tipo_vacuna)!,
+                fecha_aplicacion: vacuna.fecha_aplicacion,
+            })),
+        };
+        setMascotas((actuales) => actuales.map((mascota) =>
+            mascota.id_mascota === mascotaActualizada.id_mascota ? mascotaActualizada : mascota
+        ));
         cerrarFormulario();
+    };
+
+    const agregarFilaVacuna = () => {
+        setVacunasFormulario((actuales) => [...actuales, {
+            clave: Date.now() + Math.random(),
+            id_tipo_vacuna: "",
+            fecha_aplicacion: "",
+        }]);
     };
 
     const solicitarEliminacion = (mascota: Mascota) => {
@@ -155,6 +270,7 @@ function VerMascotas() {
 
     return (
         <section>
+            {error && <p role="alert" className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <h1 className="text-3xl text-black font-plusjakarta-bold">Mis mascotas</h1>
                 <button
@@ -174,7 +290,11 @@ function VerMascotas() {
                             <h2 className="text-xl font-plusjakarta">{mascota.nombre_mascota}</h2>
                             <p>{mascota.especie} - {mascota.raza}</p>
                             <div className="mt-auto flex flex-wrap items-end justify-between gap-2 pt-4">
-                                <button className="rounded-lg border border-violet-200 px-4 py-2 text-sm font-semibold text-violet-800 transition-colors hover:bg-violet-50">
+                                <button
+                                    type="button"
+                                    onClick={() => navigate(`/duenio/mascotas/${mascota.id_mascota}/historia`)}
+                                    className="rounded-lg border border-violet-200 px-4 py-2 text-sm font-semibold text-violet-800 transition-colors hover:bg-violet-50"
+                                >
                                     Ver historia clínica
                                 </button>
                                 <button
@@ -192,12 +312,16 @@ function VerMascotas() {
             {mostrarFormulario && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
                     <form
-                        onSubmit={handleSubmit(guardarMascota)}
+                        onSubmit={pasoFormulario === 1
+                            ? handleSubmit(guardarDatosMascota)
+                            : (event) => { event.preventDefault(); void guardarVacunas(); }}
                         className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
                     >
                         <div className="mb-6 flex items-center justify-between">
                             <h2 className="text-2xl font-semibold text-violet-950">
-                                {mascotaEnEdicion ? "Editar mascota" : "Agregar mascota"}
+                                {pasoFormulario === 1
+                                    ? (mascotaEnEdicion ? "Editar mascota" : "Agregar mascota")
+                                    : `Vacunas de ${mascotaParaVacunas?.nombre_mascota}`}
                             </h2>
                             <button
                                 type="button"
@@ -209,7 +333,7 @@ function VerMascotas() {
                             </button>
                         </div>
 
-                        <div className="grid gap-4 sm:grid-cols-2">
+                        {pasoFormulario === 1 ? <div className="grid gap-4 sm:grid-cols-2">
                             <input {...register("nombre_mascota", { required: true })} placeholder="Nombre" className="rounded-lg border border-gray-300 px-3 py-2" />
                             <input {...register("especie", { required: true })} placeholder="Especie" className="rounded-lg border border-gray-300 px-3 py-2" />
                             <input {...register("raza", { required: true })} placeholder="Raza" className="rounded-lg border border-gray-300 px-3 py-2" />
@@ -246,10 +370,68 @@ function VerMascotas() {
                                 <input {...register("castrado")} type="checkbox" />
                                 Castrado/a
                             </label>
-                        </div>
+                        </div> : (
+                            <div className="space-y-4">
+                                <p className="text-sm text-gray-600">Registra las vacunas ya aplicadas. Puedes terminar sin agregar ninguna.</p>
+                                {cargandoTipos ? <p className="text-sm text-gray-600">Cargando tipos de vacuna...</p> : null}
+                                {!cargandoTipos && tiposVacuna.length === 0 ? (
+                                    <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">No hay tipos de vacuna disponibles.</p>
+                                ) : null}
+                                {vacunasFormulario.map((vacuna) => (
+                                    <div key={vacuna.clave} className="grid gap-2 rounded-md border border-gray-200 p-3 sm:grid-cols-[1fr_1fr_auto]">
+                                        <select
+                                            aria-label="Tipo de vacuna"
+                                            value={vacuna.id_tipo_vacuna}
+                                            onChange={(event) => setVacunasFormulario((actuales) => actuales.map((actual) =>
+                                                actual.clave === vacuna.clave ? { ...actual, id_tipo_vacuna: event.target.value } : actual
+                                            ))}
+                                            className="min-w-0 rounded-md border border-gray-300 px-3 py-2"
+                                        >
+                                            <option value="">Seleccionar vacuna</option>
+                                            {tiposVacuna.map((tipo) => (
+                                                <option key={tipo.id_tipo_vacuna} value={tipo.id_tipo_vacuna}>
+                                                    {tipo.nombre_tipo_vacuna}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <input
+                                            aria-label="Fecha de aplicación"
+                                            type="date"
+                                            max={fechaMaxima}
+                                            value={vacuna.fecha_aplicacion}
+                                            onChange={(event) => setVacunasFormulario((actuales) => actuales.map((actual) =>
+                                                actual.clave === vacuna.clave ? { ...actual, fecha_aplicacion: event.target.value } : actual
+                                            ))}
+                                            className="rounded-md border border-gray-300 px-3 py-2"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setVacunasFormulario((actuales) => actuales.filter((actual) => actual.clave !== vacuna.clave))}
+                                            aria-label="Quitar vacuna"
+                                            className="rounded-md px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
+                                        >
+                                            Quitar
+                                        </button>
+                                        {vacuna.id_tipo_vacuna && (
+                                            <p className="text-xs text-gray-500 sm:col-span-2">
+                                                {tiposVacuna.find((tipo) => String(tipo.id_tipo_vacuna) === vacuna.id_tipo_vacuna)?.descripcion_tipo_vacuna}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={agregarFilaVacuna}
+                                    disabled={tiposVacuna.length === 0 || cargandoTipos}
+                                    className="rounded-md border border-violet-200 px-4 py-2 text-sm font-semibold text-violet-800 hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Agregar vacuna
+                                </button>
+                            </div>
+                        )}
 
                         <div className="mt-6 flex justify-end gap-3">
-                            {mascotaEnEdicion && (
+                            {pasoFormulario === 1 && mascotaEnEdicion && (
                                 <button
                                     type="button"
                                     onClick={() => solicitarEliminacion(mascotaEnEdicion)}
@@ -262,7 +444,7 @@ function VerMascotas() {
                                 Cancelar
                             </button>
                             <button type="submit" className="rounded-lg bg-violet-800 px-4 py-2 font-semibold text-white hover:bg-violet-950">
-                                {mascotaEnEdicion ? "Guardar cambios" : "Guardar mascota"}
+                                {pasoFormulario === 1 ? "Continuar a vacunas" : "Guardar vacunas y terminar"}
                             </button>
                         </div>
                     </form>

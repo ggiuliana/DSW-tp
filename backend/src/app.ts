@@ -9,6 +9,7 @@ import { veterinarioRouter } from './routers/veterinario.routes.js'
 import { estudioRouter } from './routers/estudio.routes.js'
 import { medicamentoRouter } from './routers/medicamento.routes.js'
 import { tipoVacunaRouter } from './routers/tipo_vacuna.routes.js'
+import { turnoRouter } from './routers/turno.routes.js'
 import { consultaRouter } from './routers/consulta.routes.js'
 import { orm, syncSchema } from './configs/db/orm.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
@@ -35,6 +36,7 @@ app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
 app.use('/api/medicamento', medicamentoRouter)
 app.use('/api/tipo_vacuna', tipoVacunaRouter)
+app.use('api/turno', turnoRouter)
 app.use('/api/consulta', consultaRouter)
 
 app.use(notFoundHandler)

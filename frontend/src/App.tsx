@@ -18,6 +18,7 @@ function App() {
                 <Route path="/register" element={<Register/>} />
                 <Route path="/duenio" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/mascotas" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
+                <Route path="/duenio/mascotas/:id_mascota/historia" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/turnos" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/perfil" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><Dashboard rol="Veterinario" /></RutaProtegida>} />
@@ -51,9 +52,19 @@ function leerToken(): TokenPayload | null {
 
 function RutaProtegida({ rolRequerido, children }: { rolRequerido: string; children: React.ReactNode }) {
   const payload = leerToken();
+  let rolGuardado: string | undefined;
+
+  try {
+    const usuario = JSON.parse(localStorage.getItem("usuario") ?? "null") as {
+      grupo?: { nombre_grupo?: string };
+    } | null;
+    rolGuardado = usuario?.grupo?.nombre_grupo;
+  } catch {
+    localStorage.removeItem("usuario");
+  }
 
   if (!payload) return <Navigate to="/login" replace />;
-  if (payload.rol !== rolRequerido) return <Navigate to="/" replace />;
+  if ((rolGuardado ?? payload.rol) !== rolRequerido) return <Navigate to="/" replace />;
 
   return <>{children}</>;
 }
