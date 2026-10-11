@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 export const jwtSecret = process.env.JWT_SECRET || 'clave-secreta-desarrollo'
 
 export interface AuthenticatedRequest extends Request {
-    usuario?: JwtPayload & { permisos?: string[] }
+    usuario?: JwtPayload & { permisos?: string[]; rol?: string }
 }
 
 export function verificarToken(permisosRequeridos?: string[]) {

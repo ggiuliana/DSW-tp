@@ -14,8 +14,16 @@ export class MascotaRepository {
     return em.findOne(Mascota, { id_mascota: id }, { populate: ['vacunas', 'vacunas.tipo_vacuna'] })
   }
 
+  findByIdWithDuenio(id: number) {
+    return em.findOne(Mascota, { id_mascota: id }, { populate: ['duenio'] })
+  }
+
   async findByDuenio(duenio: Duenio) {
     return em.find(Mascota, { duenio }, { populate: ['vacunas', 'vacunas.tipo_vacuna'] })
+  }
+
+  async findByDuenioId(idDuenio: number) {
+    return em.find(Mascota, { duenio: { id_persona: idDuenio } })
   }
 
   create(data: MascotaCreateData) {

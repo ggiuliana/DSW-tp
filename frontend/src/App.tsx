@@ -8,6 +8,7 @@ import AlignedText from './components/alignedtext'
 import Login from './pages/login';
 import Register from './pages/register'
 import PanelDuenio from './pages/panelduenio';
+import PanelVeterinario from './pages/panelveterinario';
 
 function App() {
   return (
@@ -21,7 +22,10 @@ function App() {
                 <Route path="/duenio/mascotas/:id_mascota/historia" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/turnos" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/perfil" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
-                <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><Dashboard rol="Veterinario" /></RutaProtegida>} />
+                <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
+                <Route path="/veterinario/turnos" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
+                <Route path="/veterinario/consultas" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
+                <Route path="/veterinario/perfil" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
                 <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><Dashboard rol="Administrador" /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>

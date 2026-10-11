@@ -6,11 +6,15 @@ type TurnoCreateData = Pick<Turno, 'fecha_turno' | 'hora_turno' | 'estado_turno'
 
 export class TurnoRepository {
   findAll() {
-    return em.find(Turno, {})
+    return em.find(Turno, {}, { populate: ['mascota', 'veterinario'] })
   }
 
   findById(id: number) {
-    return em.findOne(Turno, {id_turno: id})
+    return em.findOne(Turno, {id_turno: id}, { populate: ['mascota', 'veterinario'] })
+  }
+
+  normalizarEstadosOtorgados() {
+    return em.nativeUpdate(Turno, { estado_turno: 'Otorgado' }, { estado_turno: 'Confirmado' })
   }
 
   create(data: TurnoCreateData) {

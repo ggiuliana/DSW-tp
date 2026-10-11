@@ -2,7 +2,7 @@ import { Entity, PrimaryKey, ManyToOne, Property, TimeType } from '@mikro-orm/co
 import { Mascota } from './mascota.entity.js'
 import { Veterinario } from './veterinario.entity.js'
 
-type TimeOnly = `${number}:${number}` | `${number}:${number}:${number}`;
+type TimeOnly = `${number}:${number}:${number}`;
 
 @Entity()
 export class Turno {

@@ -7,11 +7,11 @@ type ConsultaCreateData = Pick<Consulta,  'diagnostico' | 'tratamiento' | 'peso'
 
 export class ConsultaRepository {
     findAll(){
-        return em.find(Consulta, {}, { populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno'] });
+        return em.find(Consulta, {}, { populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno', 'turno.mascota', 'turno.veterinario'] });
     }
 
     findById(id: number){
-        return em.findOne(Consulta, { id_consulta: id }, { populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno'] });
+        return em.findOne(Consulta, { id_consulta: id }, { populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno', 'turno.mascota', 'turno.veterinario'] });
     }
 
     add(data: ConsultaCreateData){

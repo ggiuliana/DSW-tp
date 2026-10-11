@@ -21,6 +21,10 @@ export class UsuarioRepository {
     return em.findOne(Usuario, { id_usuario: id })
   }
 
+  findByIdWithPersona(id: number) {
+    return em.findOne(Usuario, { id_usuario: id }, { populate: ['persona'] })
+  }
+
   findByNombre(nombre_usuario: string) {
     return em.findOne(Usuario, { nombre_usuario }, { populate: ['grupo.permisos', 'persona'] })
   }

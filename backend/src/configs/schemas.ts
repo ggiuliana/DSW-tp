@@ -114,6 +114,9 @@ const turnoFields = {
 
 export const turnoSchema = z.object(turnoFields)
 export const turnoPatchSchema = nonEmptyPatch(turnoSchema.partial())
+export const turnoOtorgarSchema = z.object({
+  id_mascota: z.coerce.number().int().positive(),
+})
 
 const consultaFields = {
   diagnostico: requiredText.max(100),

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import VerMascotas from "./mascotasduenio";
 import VerPerfil from "./perfilduenio.tsx"
 import HistoriaClinica from "./historiaclinica";
+import TurnosDuenio from "./turnosduenio";
 
 function PanelDuenio() {
     const nombre = localStorage.getItem("nombrePersona") || "usuario";
@@ -28,7 +29,7 @@ function PanelDuenio() {
             case "/duenio/mascotas":
                 return <VerMascotas />;
             case "/duenio/turnos":
-                return <h1 className="text-3xl text-black">Mis turnos</h1>;
+                return <TurnosDuenio />;
             case "/duenio/perfil":
                 return <VerPerfil />;
             default:

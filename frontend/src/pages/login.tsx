@@ -85,7 +85,7 @@ function Login(){
             }
             navigate(ruta);
         } catch {
-            setErrorEnvio("No se pudo conectar con el servidor. Verifica que el backend esté activo y que uses http://localhost:5173.");
+            setErrorEnvio("No se pudo conectar con el backend. Confirma que esté activo e inténtalo de nuevo.");
         }
     };
     

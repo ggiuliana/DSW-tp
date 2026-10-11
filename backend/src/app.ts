@@ -12,6 +12,7 @@ import { tipoVacunaRouter } from './routers/tipo_vacuna.routes.js'
 import { turnoRouter } from './routers/turno.routes.js'
 import { consultaRouter } from './routers/consulta.routes.js'
 import { orm, syncSchema } from './configs/db/orm.js'
+import { turnoRepository } from './repositories/turno.repository.js'
 import { DatabaseSeeder } from './seeders/DatabaseSeeder.js'
 import { RequestContext } from '@mikro-orm/core'
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js'
@@ -19,7 +20,7 @@ import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js
 const app = express()
 
 app.use(cors({
-    origin: "http://localhost:5173"
+  origin: /^http:\/\/localhost:(?:517[3-9]|51[89]\d)$/
 }));
 
 app.use(express.json())
@@ -36,7 +37,7 @@ app.use('/api/estudio', estudioRouter)
 app.use('/api/proveedor', proveedorRouter)
 app.use('/api/medicamento', medicamentoRouter)
 app.use('/api/tipo_vacuna', tipoVacunaRouter)
-app.use('api/turno', turnoRouter)
+app.use('/api/turno', turnoRouter)
 app.use('/api/consulta', consultaRouter)
 
 app.use(notFoundHandler)
@@ -44,6 +45,7 @@ app.use(errorHandler)
 
 await syncSchema()
 await orm.getSeeder().seed(DatabaseSeeder)
+await turnoRepository.normalizarEstadosOtorgados()
 
 app.listen(3000, () => {
   console.log('Server runnning on http://localhost:3000/')

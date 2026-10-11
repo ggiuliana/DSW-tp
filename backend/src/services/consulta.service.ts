@@ -30,6 +30,7 @@ export class ConsultaService {
   async add(data: ConsultaData) {
     const turno = await turnoRepository.findById(data.id_turno)
     if (!turno) throw new Error('TURNO_NOT_FOUND')
+    this.validarTurnoConfirmado(turno.estado_turno)
 
     const { id_turno: _idTurno, id_estudios, medicamentos_usados, ...consultaData } = data
     const consulta = consultaRepository.add({ ...consultaData, turno })
@@ -47,6 +48,7 @@ export class ConsultaService {
 
     const turno = await turnoRepository.findById(data.id_turno)
     if (!turno) throw new Error('TURNO_NOT_FOUND')
+    this.validarTurnoConfirmado(turno.estado_turno)
 
     const { id_turno: _idTurno, id_estudios, medicamentos_usados, ...cambios } = data
     Object.assign(consulta, { ...cambios, turno })
@@ -65,7 +67,10 @@ export class ConsultaService {
     if (id_turno !== undefined) {
       const turno = await turnoRepository.findById(id_turno)
       if (!turno) throw new Error('TURNO_NOT_FOUND')
+      this.validarTurnoConfirmado(turno.estado_turno)
       consulta.turno = turno
+    } else {
+      this.validarTurnoConfirmado(consulta.turno.estado_turno)
     }
     Object.assign(consulta, cambios)
     if (id_estudios !== undefined) await this.sincronizarEstudios(consulta, id_estudios)
@@ -79,6 +84,10 @@ export class ConsultaService {
     const consulta = await consultaRepository.findById(id)
     if (!consulta) return null
     return consultaRepository.remove(consulta)
+  }
+
+  private validarTurnoConfirmado(estado: string) {
+    if (estado.toLowerCase() !== 'confirmado') throw new Error('CONSULTA_TURNO_NOT_CONFIRMED')
   }
 
   private async sincronizarEstudios(consulta: Consulta, ids: number[]) {
