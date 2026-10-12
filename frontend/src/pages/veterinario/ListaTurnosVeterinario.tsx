@@ -1,4 +1,5 @@
 import type { ConsultaVeterinario, TurnoVeterinario } from "../../types/veterinario.js";
+import { fechaLegible } from "../../utils/fechaLegible.js";
 
 interface ListaTurnosVeterinarioProps {
   turnos: TurnoVeterinario[];
@@ -19,7 +20,7 @@ function ListaTurnosVeterinario({ turnos, consultas, onBorrar }: ListaTurnosVete
               <span className="font-normal text-gray-500">{turno.mascota?.especie ? ` · ${turno.mascota.especie}` : ""}</span>
             </p>
             <p className="mt-1 text-sm text-gray-600">
-              {new Date(turno.fecha_turno).toLocaleDateString("es-AR", { dateStyle: "long" })} · {turno.hora_turno.slice(0, 5)}
+              {fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}
             </p>
             {turno.observaciones_turno && <p className="mt-1 text-sm text-gray-500">{turno.observaciones_turno}</p>}
           </div>

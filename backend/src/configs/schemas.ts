@@ -104,7 +104,7 @@ export const usuarioSchema = z.object(usuarioFields)
 export const usuarioPatchSchema = nonEmptyPatch(z.object(usuarioFields).partial())
 
 const turnoFields = {
-  fecha_turno: z.string().refine((value) => !Number.isNaN(Date.parse(value)), 'Fecha inválida').transform((value) => new Date(value)),
+  fecha_turno: z.iso.date().transform((value) => new Date(`${value}T00:00:00.000Z`)),
   hora_turno: requiredText,
   estado_turno: requiredText,
   observaciones_turno: z.string().max(200).optional(),

@@ -15,7 +15,7 @@ export class TurnoRepository {
   }
 
   async findByVeterinario(idVet: number) {
-    return em.find(Turno, {veterinario: {id_persona: idVet}});
+    return em.find(Turno, { veterinario: { id_persona: idVet } }, { populate: ['mascota', 'veterinario'] });
   }
 
   create(data: TurnoCreateData) {
