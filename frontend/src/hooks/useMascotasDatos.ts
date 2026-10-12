@@ -103,7 +103,6 @@ export const useMascotasDatos = (mostrarFormulario: boolean, pasoFormulario: num
         if (!mascotaAEliminar) return;
         try {
             await borrarMascota(mascotaAEliminar.id_mascota);
-            // Si sale bien, la sacamos de la lista local
             setMascotas((prev) => prev.filter((m) => m.id_mascota !== mascotaAEliminar.id_mascota));
             setError("");
             onSuccess();

@@ -56,6 +56,10 @@ export class TurnoService {
     return turnoRepository.findByVeterinario(idVet)
   }
 
+  async findTurnosByVeterinarioAndFecha(idVet: number, fechaInicio: string, fechaFin: string) {
+    return turnoRepository.findTurnosByVeterinarioAndFecha(idVet, fechaInicio, fechaFin)
+  }
+
   async add(data: TurnoData) {
     await this.validarDisponibilidad(data.fecha_turno, data.hora_turno, data.id_veterinario)
     const veterinario = await veterinarioRepository.findById(data.id_veterinario)

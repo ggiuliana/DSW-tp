@@ -14,6 +14,13 @@ export interface TurnoVeterinario {
   veterinario?: { id_persona: number };
 }
 
+export interface EstudioVeterinario {
+  id_estudio: number;
+  nombre_estudio: string;
+  descripcion_estudio: string;
+  precio_estudio: number;
+}
+
 export interface ConsultaVeterinario {
   id_consulta: number;
   diagnostico: string;
@@ -21,6 +28,7 @@ export interface ConsultaVeterinario {
   peso: number;
   observaciones?: string;
   turno: TurnoVeterinario;
+  estudios?: EstudioVeterinario[];
 }
 
 export interface Veterinario {
@@ -45,6 +53,7 @@ export interface ConsultaForm {
   tratamiento: string;
   peso: number;
   observaciones: string;
+  id_estudios: number[];
 }
 
 export interface PasswordVeterinarioForm {
