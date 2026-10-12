@@ -18,6 +18,10 @@ async function findOne(req: Request, res: Response) {
   if (!turno) throw new Error('TURNO_NOT_FOUND')
   return res.status(200).json({ message: 'Turno found', data: turno })
 }
+async function findByVeterinario(req: Request, res: Response) {
+  const turnos = await turnoService.findByVeterinario(Number(req.params.id_vet))
+  return res.status(200).json({ message: 'Turno found', data: turnos })
+}
 
 async function add(req: Request, res: Response) {
   if ((req as AuthenticatedRequest).usuario?.rol === 'Veterinario') req.body.estado_turno = 'Pendiente'
@@ -65,4 +69,4 @@ async function remove(req: Request, res: Response) {
   return res.status(200).json({ message: 'Turno removed', data: turno })
 }
 
-export { findAll, findParaDuenio, findOne, add, update, patch, otorgar, remove }
+export { findAll, findParaDuenio, findOne, findByVeterinario, add, update, patch, otorgar, remove }

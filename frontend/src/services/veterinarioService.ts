@@ -7,7 +7,7 @@ import type {
 } from "../types/veterinario.js";
 import { api } from "../utils/apiReutilizable.js";
 
-export const obtenerTurnosVeterinario = () => api<TurnoVeterinario[]>("/turno");
+export const obtenerTurnosVeterinario = (idVet: number) => api<TurnoVeterinario[]>(`/turno/veterinario/${idVet}`);
 
 export const obtenerConsultasVeterinario = () => api<ConsultaVeterinario[]>("/consulta");
 

@@ -1,5 +1,6 @@
 import { Turno } from '../entities/turno.entity.js'
 import { orm } from '../configs/db/orm.js'
+import { Veterinario } from '../entities/veterinario.entity.js'
 
 const em = orm.em
 type TurnoCreateData = Pick<Turno, 'fecha_turno' | 'hora_turno' | 'estado_turno' | 'observaciones_turno' | 'mascota' | 'veterinario'>
@@ -13,6 +14,9 @@ export class TurnoRepository {
     return em.findOne(Turno, {id_turno: id}, { populate: ['mascota', 'veterinario'] })
   }
 
+  async findByVeterinario(idVet: number) {
+    return em.find(Turno, {veterinario: {id_persona: idVet}});
+  }
 
   create(data: TurnoCreateData) {
     const turno = new Turno()

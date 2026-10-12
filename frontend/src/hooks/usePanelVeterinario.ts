@@ -22,11 +22,10 @@ export const usePanelVeterinario = () => {
     if (!idVeterinario) return;
 
     let activo = true;
-    Promise.all([obtenerTurnosVeterinario(), obtenerConsultasVeterinario()])
+    Promise.all([obtenerTurnosVeterinario(idVeterinario), obtenerConsultasVeterinario()])
       .then(([todosLosTurnos, todasLasConsultas]) => {
         if (!activo) return;
         const propios = todosLosTurnos
-          .filter((turno) => turno.veterinario?.id_persona === idVeterinario)
           .sort((a, b) => `${a.fecha_turno}T${a.hora_turno}`.localeCompare(`${b.fecha_turno}T${b.hora_turno}`));
         const idsTurno = new Set(propios.map((turno) => turno.id_turno));
         setTurnos(propios);
