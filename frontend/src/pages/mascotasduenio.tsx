@@ -70,7 +70,10 @@ function VerMascotas() {
             if (!idDuenio) {
                 throw new Error("No se encontró el dueño de la sesión");
             }
+
             const token = localStorage.getItem("token");
+            if (!token) throw new Error("La sesión expiró. Inicia sesión nuevamente.");
+
             const response = await fetch(`http://localhost:3000/api/mascota/duenio/${idDuenio}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -167,6 +170,11 @@ function VerMascotas() {
     const guardarDatosMascota = async (data: MascotaFormData) => {
         const idDuenio = localStorage.getItem("idPersona");
         if (!idDuenio) return;
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setError("La sesión expiró. Inicia sesión nuevamente.");
+            return;
+        }
 
         const editando = mascotaEnEdicion !== null;
         const url = editando
@@ -175,9 +183,9 @@ function VerMascotas() {
         const token = localStorage.getItem("token");
         const response = await fetch(url, {
             method: editando ? "PUT" : "POST",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 ...data,
@@ -206,6 +214,11 @@ function VerMascotas() {
 
     const guardarVacunas = async () => {
         if (!mascotaParaVacunas) return;
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setError("La sesión expiró. Inicia sesión nuevamente.");
+            return;
+        }
         const incompleta = vacunasFormulario.some((vacuna) =>
             Boolean(vacuna.id_tipo_vacuna) !== Boolean(vacuna.fecha_aplicacion)
         );
@@ -223,9 +236,9 @@ function VerMascotas() {
         const token = localStorage.getItem("token");
         const response = await fetch(`http://localhost:3000/api/mascota/${mascotaParaVacunas.id_mascota}`, {
             method: "PATCH",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ vacunas }),
         });
@@ -262,6 +275,11 @@ function VerMascotas() {
 
     const eliminarMascota = async () => {
         if (!mascotaAEliminar) return;
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setError("La sesión expiró. Inicia sesión nuevamente.");
+            return;
+        }
 
         const mascota = mascotaAEliminar;
         const token = localStorage.getItem("token");

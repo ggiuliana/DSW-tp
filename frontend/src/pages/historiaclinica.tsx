@@ -36,8 +36,12 @@ function HistoriaClinica({ idMascota }: { idMascota: string }) {
         const cargarMascota = async () => {
             const idDuenio = localStorage.getItem("idPersona");
             if (!idDuenio) throw new Error("No se encontró el dueño de la sesión.");
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("La sesión expiró. Inicia sesión nuevamente.");
 
-            const response = await fetch(`http://localhost:3000/api/mascota/duenio/${idDuenio}`);
+            const response = await fetch(`http://localhost:3000/api/mascota/duenio/${idDuenio}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             const resultado = await response.json();
             if (!response.ok) throw new Error(resultado.message || "No se pudo cargar la historia clínica.");
 

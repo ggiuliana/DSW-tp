@@ -58,9 +58,12 @@ function VerPerfil(){
             if (!idDuenio) {
                 throw new Error("No se encontró el dueño de la sesión")
             }
+            const token = localStorage.getItem("token")
+            if (!token) throw new Error("La sesión expiró. Inicia sesión nuevamente.")
 
             const response = await fetch(`http://localhost:3000/api/duenio/${idDuenio}`, {
                 method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
             })
             const resultado = await response.json()
 
@@ -103,9 +106,17 @@ function VerPerfil(){
         if (!idDuenio) {
                 throw new Error("No se encontró el dueño de la sesión")
             }
+        const token = localStorage.getItem("token")
+        if (!token) {
+            setError("La sesión expiró. Inicia sesión nuevamente.")
+            return
+        }
         const response = await fetch(`http://localhost:3000/api/duenio/${idDuenio}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify({...data}),
         });
         const resultado = await response.json()
