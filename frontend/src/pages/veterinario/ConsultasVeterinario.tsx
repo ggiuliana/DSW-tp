@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import type { ConsultaForm, ConsultaVeterinario, TurnoVeterinario } from "../../types/veterinario.js";
 import { useConsultasVeterinario } from "../../hooks/useConsultasVeterinario";
+import { fechaLegible } from "../../utils/fechaLegible.js";
 
 interface ConsultasVeterinarioProps {
   turnos: TurnoVeterinario[];
@@ -52,7 +53,7 @@ function ConsultasVeterinario({ turnos, consultas, onGuardar }: ConsultasVeterin
             <article key={turno.id_turno} className="flex flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota || "Mascota sin asignar"}</p>
-                <p className="mt-1 text-sm text-gray-600">{new Date(turno.fecha_turno).toLocaleDateString("es-AR", { dateStyle: "long" })} · {turno.hora_turno.slice(0, 5)} · {turno.estado_turno}</p>
+                <p className="mt-1 text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)} · {turno.estado_turno}</p>
                 {consulta && <p className="mt-2 text-sm text-gray-700">{consulta.diagnostico}</p>}
               </div>
               <button type="button" onClick={() => seleccionarConsulta(turno, consulta)} className="rounded-md border border-violet-300 px-4 py-2 text-sm font-semibold text-violet-800 hover:bg-violet-50">{consulta ? "Editar consulta" : "Registrar consulta"}</button>

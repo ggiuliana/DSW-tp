@@ -9,7 +9,7 @@ export class Turno {
     @PrimaryKey({ autoincrement: true })
     id_turno?: number
     
-    @Property()
+    @Property({ type: 'date' })
     fecha_turno!: Date
 
     @Property({ type: TimeType })
