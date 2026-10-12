@@ -44,6 +44,7 @@ export class PermisosSeeder extends Seeder {
             { nombre_permiso: 'Agregar', descripcion_permiso: 'Agregar tipo_vacunas', categoria: 'tipo_vacunas', activo: true },
             { nombre_permiso: 'Actualizar', descripcion_permiso: 'Actualizar tipo_vacunas', categoria: 'tipo_vacunas', activo: true },
             { nombre_permiso: 'Eliminar', descripcion_permiso: 'Leer tipo_vacunas', categoria: 'tipo_vacunas', activo: true },
+            { nombre_permiso: 'Eliminar', descripcion_permiso: 'Eliminar tipo_vacunas', categoria: 'tipo_vacunas', activo: true },
             //Permisos de consultas
             { nombre_permiso: 'Leer', descripcion_permiso: 'Leer consultas', categoria: 'consultas', activo: true },
             { nombre_permiso: 'Agregar', descripcion_permiso: 'Agregar consultas', categoria: 'consultas', activo: true },

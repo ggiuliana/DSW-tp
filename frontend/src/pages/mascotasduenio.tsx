@@ -70,8 +70,10 @@ function VerMascotas() {
             if (!idDuenio) {
                 throw new Error("No se encontró el dueño de la sesión");
             }
-
-            const response = await fetch(`http://localhost:3000/api/mascota/duenio/${idDuenio}`);
+            const token = localStorage.getItem("token");
+            const response = await fetch(`http://localhost:3000/api/mascota/duenio/${idDuenio}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             const resultado = await response.json();
             if (!response.ok) throw new Error(resultado.message);
             return resultado.data as Mascota[];
@@ -170,9 +172,13 @@ function VerMascotas() {
         const url = editando
             ? `http://localhost:3000/api/mascota/${mascotaEnEdicion.id_mascota}`
             : `http://localhost:3000/api/mascota/duenio/${idDuenio}`;
+        const token = localStorage.getItem("token");
         const response = await fetch(url, {
             method: editando ? "PUT" : "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify({
                 ...data,
                 fechaNac: `${data.fechaNac} 00:00:00`,
@@ -214,9 +220,13 @@ function VerMascotas() {
                 id_tipo_vacuna: Number(vacuna.id_tipo_vacuna),
                 fecha_aplicacion: vacuna.fecha_aplicacion,
             }));
+        const token = localStorage.getItem("token");
         const response = await fetch(`http://localhost:3000/api/mascota/${mascotaParaVacunas.id_mascota}`, {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify({ vacunas }),
         });
         const resultado = await response.json();
@@ -254,8 +264,10 @@ function VerMascotas() {
         if (!mascotaAEliminar) return;
 
         const mascota = mascotaAEliminar;
+        const token = localStorage.getItem("token");
         const response = await fetch(`http://localhost:3000/api/mascota/${mascota.id_mascota}`, {
             method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
         });
         const resultado = await response.json();
         if (!response.ok) {

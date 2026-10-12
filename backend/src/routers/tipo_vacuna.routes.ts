@@ -11,4 +11,6 @@ tipoVacunaRouter.get('/:id_tipo_vacuna', verificarToken(['tipo_vacunas:Leer']), 
 tipoVacunaRouter.post('/', verificarToken(['tipo_vacunas:Agregar']), validate(tipoVacunaSchema), add)
 tipoVacunaRouter.put('/:id_tipo_vacuna', verificarToken(['tipo_vacunas:Actualizar']), validateParams(idParams('id_tipo_vacuna')), validate(tipoVacunaSchema), update)
 tipoVacunaRouter.patch('/:id_tipo_vacuna', verificarToken(['tipo_vacunas:Actualizar']), validateParams(idParams('id_tipo_vacuna')), validate(tipoVacunaPatchSchema), patch)
-tipoVacunaRouter.delete('/:id_tipo_vacuna', verificarToken(['tipo_vacunas:Eliminar']), validateParams(idParams('id_tipo_vacuna')), remove)
+//tipoVacunaRouter.delete('/:id_tipo_vacuna', verificarToken(['tipo_vacunas:Eliminar']), validateParams(idParams('id_tipo_vacuna')), remove)
+tipoVacunaRouter.delete('/:id_tipo_vacuna', verificarToken(), remove)
+

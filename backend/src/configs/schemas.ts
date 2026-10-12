@@ -69,7 +69,7 @@ export const estudioPatchSchema = nonEmptyPatch(estudioSchema.partial())
 
 const tipoVacunaFields = {
   nombre_tipo_vacuna: requiredText.max(30),
-  descripcion_tipo_vacuna: requiredText.max(200),
+  descripcion_tipo_vacuna: z.string().trim().max(200).optional(),
 }
 
 export const tipoVacunaSchema = z.object(tipoVacunaFields)

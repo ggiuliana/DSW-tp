@@ -9,6 +9,8 @@ import Login from './pages/login';
 import Register from './pages/register'
 import PanelDuenio from './pages/panelduenio';
 import PanelVeterinario from './pages/panelveterinario';
+import PanelAdministrador from './pages/paneladministrador';
+import GestionTiposVacuna from './pages/gestiontipovacunas';
 
 function App() {
   return (
@@ -26,7 +28,12 @@ function App() {
                 <Route path="/veterinario/turnos" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
                 <Route path="/veterinario/consultas" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
                 <Route path="/veterinario/perfil" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
-                <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><Dashboard rol="Administrador" /></RutaProtegida>} />
+                <Route path="/administrador" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/veterinarios" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/estudios" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/tipos-vacuna" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/turnos" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/tipos-vacuna" element={<GestionTiposVacuna />} />
             </Routes>
         </BrowserRouter>
     );
@@ -71,16 +78,6 @@ function RutaProtegida({ rolRequerido, children }: { rolRequerido: string; child
   if ((rolGuardado ?? payload.rol) !== rolRequerido) return <Navigate to="/" replace />;
 
   return <>{children}</>;
-}
-
-function Dashboard({ rol }: { rol: string }) {
-  return (
-    <main className="min-h-screen bg-purple-50 p-8">
-      <h1 className="font-plusjakarta text-3xl text-purple-950">
-        Panel de {rol}
-      </h1>
-    </main>
-  );
 }
 
 function Home() {
