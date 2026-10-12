@@ -31,7 +31,7 @@ export default function GestionTiposVacuna() {
       {/* Cabecera */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold text-violet-900 italic tracking-tight">
+          <h2 className="text-3xl font-bold text-violet-950 font-plusjakarta">
             Tipos de Vacuna
           </h2>
           <p className="text-gray-500 mt-1">Gestión del catálogo de vacunas disponibles</p>

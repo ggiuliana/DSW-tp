@@ -3,9 +3,9 @@ import AdminSidebar from "../../components/layout/AdminSidebar";
 import GestionVeterinarios from "./GestionVeterinarios";
 import GestionTiposVacuna from "./GestionTipoVacunas";
 import InicioAdministrador from "./InicioAdministrador";
-import EstudiosAdministrador from "./EstudiosAdministrador";
 import TurnosAdministrador from "./TurnosAdministrador";
 import logoVet from "../../assets/logoVet.png";
+import GestionEstudios from "./GestionEstudios";
 
 export default function PanelAdministrador() {
   const { pathname } = useLocation();
@@ -24,7 +24,7 @@ export default function PanelAdministrador() {
       case "/administrador/veterinarios":
         return <GestionVeterinarios />;
       case "/administrador/estudios":
-        return <EstudiosAdministrador />;
+        return <GestionEstudios />;
       case "/administrador/tipos-vacuna":
         return <GestionTiposVacuna />;
       case "/administrador/turnos":
