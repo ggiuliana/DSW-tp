@@ -31,11 +31,13 @@ function PanelVeterinario() {
 
 function ContenidoPanelVeterinario({ pathname }: { pathname: string }) {
   if (pathname === "/veterinario/perfil") return <PerfilVeterinario />;
+  if (pathname === "/veterinario") {
+    return <PanelInicioVeterinario nombre={localStorage.getItem("nombrePersona") || "Profesional"} />;
+  }
   return <AgendaVeterinario pathname={pathname} />;
 }
 
 function AgendaVeterinario({ pathname }: { pathname: string }) {
-  const navigate = useNavigate();
   const { nombre, turnos, consultas, cargando, error, crearTurnoDisponible, borrarTurnoDisponible, guardarConsulta } = usePanelVeterinario();
 
   if (cargando) return <p className="text-gray-600">Cargando agenda...</p>;
@@ -47,7 +49,7 @@ function AgendaVeterinario({ pathname }: { pathname: string }) {
         ? <ConsultasVeterinario turnos={turnos} consultas={consultas} onGuardar={guardarConsulta} />
         : pathname === "/veterinario/turnos"
           ? <TurnosVeterinario turnos={turnos} consultas={consultas} onCrear={crearTurnoDisponible} onBorrar={borrarTurnoDisponible} />
-          : <PanelInicioVeterinario nombre={nombre} turnos={turnos} consultas={consultas} onVerAgenda={() => navigate("/veterinario/turnos")} />}
+          : <PanelInicioVeterinario nombre={nombre} />}
     </>
   );
 }

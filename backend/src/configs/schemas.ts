@@ -114,6 +114,13 @@ const turnoFields = {
 
 export const turnoSchema = z.object(turnoFields)
 export const turnoPatchSchema = nonEmptyPatch(turnoSchema.partial())
+export const turnosFechaQuerySchema = z.object({
+  fechaInicio: z.iso.date(),
+  fechaFin: z.iso.date(),
+}).refine((rango) => rango.fechaInicio <= rango.fechaFin, {
+  path: ['fechaFin'],
+  message: 'La fecha final debe ser igual o posterior a la fecha inicial',
+})
 export const turnoOtorgarSchema = z.object({
   id_mascota: z.coerce.number().int().positive(),
 })

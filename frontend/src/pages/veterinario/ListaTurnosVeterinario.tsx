@@ -3,11 +3,11 @@ import { fechaLegible } from "../../utils/fechaLegible.js";
 
 interface ListaTurnosVeterinarioProps {
   turnos: TurnoVeterinario[];
-  consultas: ConsultaVeterinario[];
+  consultas?: ConsultaVeterinario[];
   onBorrar?: (turno: TurnoVeterinario) => void;
 }
 
-function ListaTurnosVeterinario({ turnos, consultas, onBorrar }: ListaTurnosVeterinarioProps) {
+function ListaTurnosVeterinario({ turnos, consultas = [], onBorrar }: ListaTurnosVeterinarioProps) {
   const consultaPorTurno = new Set(consultas.map((consulta) => consulta.turno?.id_turno));
 
   return (
