@@ -13,9 +13,6 @@ export class TurnoRepository {
     return em.findOne(Turno, {id_turno: id}, { populate: ['mascota', 'veterinario'] })
   }
 
-  normalizarEstadosOtorgados() {
-    return em.nativeUpdate(Turno, { estado_turno: 'Otorgado' }, { estado_turno: 'Confirmado' })
-  }
 
   create(data: TurnoCreateData) {
     const turno = new Turno()

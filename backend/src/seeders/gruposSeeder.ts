@@ -9,6 +9,7 @@ export class GrupoPermisoSeeder extends Seeder {
     const todosLosPermisos = await em.find(Permiso, {});
 
     const configuracionDuenio: Record<string, string[]> = {
+    duenios: ['Leer', 'Actualizar'],
     turnos: ['Leer', 'Actualizar'],
     consultas: ['Leer'],
     usuarios: ['Leer', 'Actualizar'],
@@ -22,6 +23,7 @@ export class GrupoPermisoSeeder extends Seeder {
     });
 
     const configuracionVeterinario: Record<string, string[]> = {
+    veterinarios: ['Leer'],
     turnos: ['Leer', 'Agregar', 'Actualizar', 'Eliminar'],
     consultas: ['Leer', 'Agregar', 'Actualizar', 'Eliminar'],
     usuarios: ['Leer', 'Actualizar'],
@@ -57,9 +59,13 @@ export class GrupoPermisoSeeder extends Seeder {
     ]
 
     for (const datosGrupo of grupos) {
-            const grupo = await em.findOne(Grupo_Permiso, { nombre_grupo: datosGrupo.nombre_grupo })
+            const grupo = await em.findOne(Grupo_Permiso, { nombre_grupo: datosGrupo.nombre_grupo }, { populate: ['permisos'] })
             if (!grupo) {
                 em.create(Grupo_Permiso, datosGrupo)
+            } else {
+                grupo.descripcion_grupo = datosGrupo.descripcion_grupo
+                grupo.activo = datosGrupo.activo
+                grupo.permisos.set(datosGrupo.permisos)
             }
         }
 

@@ -6,8 +6,8 @@ import { estudioPatchSchema, estudioSchema, idParams } from '../configs/schemas.
 
 export const estudioRouter = Router()
 
-estudioRouter.get('/', findAll)
-estudioRouter.get('/:id_estudio', validateParams(idParams('id_estudio')), findOne)
+estudioRouter.get('/', verificarToken(['estudios:Leer']), findAll)
+estudioRouter.get('/:id_estudio', verificarToken(['estudios:Leer']), validateParams(idParams('id_estudio')), findOne)
 estudioRouter.post('/', verificarToken(['estudios:Agregar']), validate(estudioSchema), add)
 estudioRouter.put('/:id_estudio', verificarToken(['estudios:Actualizar']), validateParams(idParams('id_estudio')), validate(estudioSchema), update)
 estudioRouter.patch('/:id_estudio', verificarToken(['estudios:Actualizar']), validateParams(idParams('id_estudio')), validate(estudioPatchSchema), patch)

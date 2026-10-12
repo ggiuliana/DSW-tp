@@ -1,6 +1,8 @@
 import 'reflect-metadata'
 import express from 'express'
 import cors from 'cors'
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './configs/swagger.js';
 import { mascotaRouter } from './routers/mascota.routes.js'
 import { duenioRouter } from './routers/duenio.routes.js'
 import { usuarioRouter } from './routers/usuario.routes.js'
@@ -18,6 +20,8 @@ import { RequestContext } from '@mikro-orm/core'
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js'
 
 const app = express()
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors({
   origin: /^http:\/\/localhost:(?:517[3-9]|51[89]\d)$/
@@ -45,8 +49,8 @@ app.use(errorHandler)
 
 await syncSchema()
 await orm.getSeeder().seed(DatabaseSeeder)
-await turnoRepository.normalizarEstadosOtorgados()
 
 app.listen(3000, () => {
-  console.log('Server runnning on http://localhost:3000/')
+  console.log('Server runnning on http://localhost:3000/');
+  console.log('Documentación en http://localhost:3000/api-docs');
 })

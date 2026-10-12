@@ -11,7 +11,7 @@ usuarioRouter.get('/:id_usuario', verificarToken(['usuarios:Leer']), validatePar
 usuarioRouter.post('/login', validate(loginSchema), login)
 usuarioRouter.post('/registro', validate(registroDuenioSchema), registerDuenio)
 usuarioRouter.post('/registro-veterinario', verificarToken(['veterinarios:Agregar']), validate(registroVeterinarioSchema), registerVeterinario)
-usuarioRouter.post('/:id_persona', validateParams(idParams('id_persona')), validate(usuarioSchema), add)
+usuarioRouter.post('/:id_persona', verificarToken(['usuarios:Agregar']), validateParams(idParams('id_persona')), validate(usuarioSchema), add)
 usuarioRouter.delete('/cuenta/:id_usuario', verificarToken(), validateParams(idParams('id_usuario')), verificarCuentaPropia, removeCuenta)
 usuarioRouter.patch('/cuenta/:id_usuario/contrasenia', verificarToken(), validateParams(idParams('id_usuario')), verificarCuentaPropia, validate(cambioContraseniaSchema), changePassword)
 usuarioRouter.put('/:id_usuario', verificarToken(['usuarios:Actualizar']), validateParams(idParams('id_usuario')), validate(usuarioPatchSchema), update)
