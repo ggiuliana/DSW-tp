@@ -1,16 +1,19 @@
 import './App.css'
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import Header from './components/header'
-import AppointButton from './components/appointbutton'
-import FloatBlock from './components/floatblock'
-import Footer from './components/footer'
-import AlignedText from './components/alignedtext'
-import Login from './pages/login';
-import Register from './pages/register'
-import PanelDuenio from './pages/panelduenio';
-import PanelVeterinario from './pages/panelveterinario';
-import PanelAdministrador from './pages/paneladministrador';
-import GestionTiposVacuna from './pages/gestiontipovacunas';
+import Header from './components/layout/Header'
+import AppointButton from './components/ui/AppointButton'
+import FloatBlock from './components/ui/FloatBlock'
+import Footer from './components/layout/Footer'
+import AlignedText from './components/ui/AlignedText'
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register'
+import PanelDuenio from './pages/duenio/PanelDuenio';
+import PanelVeterinario from './pages/veterinario/PanelVeterinario';
+import PanelAdministrador from './pages/admin/PanelAdministrador';
+import escudoIcon from './assets/icons/escudo.png';
+import botiquinIcon from './assets/icons/botiquin.png';
+import cirugiaIcon from './assets/icons/cirugia.png';
+import jeringuillaIcon from './assets/icons/jeringuilla.png';
 
 function App() {
   return (
@@ -33,7 +36,6 @@ function App() {
                 <Route path="/administrador/estudios" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
                 <Route path="/administrador/tipos-vacuna" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
                 <Route path="/administrador/turnos" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
-                <Route path="/administrador/tipos-vacuna" element={<GestionTiposVacuna />} />
             </Routes>
         </BrowserRouter>
     );
@@ -93,7 +95,7 @@ function Home() {
           <div className="w-full flex flex-col items-center justify-center md:min-w-0 px-4 py-6 md:px-8 md:gap-4 ">
 
             <div className="inline-flex items-center gap-2 justify-center rounded-full bg-violet-200 px-4 py-1 w-fit mx-4 md:mx-0 mt-4">
-              <img src="./icons/escudo.png" alt="logo de veterinaria" className="max-w-4"></img>
+              <img src={escudoIcon} alt="logo de veterinaria" className="max-w-4"></img>
               <h3 className="font-plusjakarta2 text-sm text-violet-900">ACOMPAÑANDO A MÁS DE 5.000 DUEÑOS</h3>
             </div>
             <div className="flex flex-col items-center justify-center  mt-8 md:mt-2 pb-6 ">
@@ -115,19 +117,19 @@ function Home() {
           <FloatBlock 
           titulo="Chequeos" 
           contenido="Exámenes físicos completos para mantener a tu mascota sana y feliz." 
-          icono="./icons/botiquin.png" 
+          icono={botiquinIcon}
           color="bg-violet-200" />
 
           <FloatBlock 
           titulo="Cirugías" 
           contenido="Intervenciones quirúrgicas seguras y efectivas realizadas por veterinarios profesionales." 
-          icono="./icons/cirugia.png" 
+          icono={cirugiaIcon}
           color="bg-orange-200" />
 
           <FloatBlock 
           titulo="Vacunas" 
           contenido="Programas de inmunización completas para proteger la salud de su mascota." 
-          icono="./icons/jeringuilla.png" 
+          icono={jeringuillaIcon}
           color="bg-purple-200" />
         </div>
         
