@@ -1,6 +1,8 @@
 import type { TipoVacuna } from "../types/tipovacuna.js";
 import type { TipoVacunaForm, VeterinarioAdmin, VeterinarioAdminForm } from "../types/admin.js";
 import { api } from "../utils/apiReutilizable.js";
+import type { Estudio } from "../types/estudio.js";
+import type { EstudioForm } from "../types/admin.js";
 
 export const obtenerTiposVacuna = () => api<TipoVacuna[]>("/tipo_vacuna");
 
@@ -23,3 +25,14 @@ export const actualizarVeterinarioAdmin = (id: number, data: VeterinarioAdminFor
 
 export const eliminarVeterinarioAdmin = (id: number) =>
   api<void>(`/veterinario/${id}`, { method: "DELETE" });
+
+export const obtenerEstudios = () => api<Estudio[]>("/estudio");
+
+export const crearEstudio = (data: EstudioForm) =>
+  api<Estudio>("/estudio", { method: "POST", body: JSON.stringify(data) });
+
+export const actualizarEstudio = (id: number, data: EstudioForm) =>
+  api<Estudio>(`/estudio/${id}`, { method: "PUT", body: JSON.stringify(data) });
+
+export const eliminarEstudio = (id: number) =>
+  api<void>(`/estudio/${id}`, { method: "DELETE" });
