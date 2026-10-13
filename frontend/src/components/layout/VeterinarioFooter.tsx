@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom";
 import hogarIcon from "../../assets/icons/hogar.png";
 import agendaIcon from "../../assets/icons/agenda.png";
-import botiquinIcon from "../../assets/icons/botiquin.png";
+import consultaIcon from "../../assets/icons/consultante.png";
 import usuarioIcon from "../../assets/icons/usuario.png";
 
 const enlaces = [
   { to: "/veterinario", label: "Inicio", icono: hogarIcon, end: true },
   { to: "/veterinario/turnos", label: "Turnos", icono: agendaIcon },
-  { to: "/veterinario/consultas", label: "Consultas", icono: botiquinIcon },
+  { to: "/veterinario/consultas", label: "Consultas", icono: consultaIcon },
   { to: "/veterinario/perfil", label: "Mi perfil", icono: usuarioIcon },
 ];
 

@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import hogarIcon from "../../assets/icons/hogar.png";
-import botiquinIcon from "../../assets/icons/botiquin.png";
-import cirugiaIcon from "../../assets/icons/cirugia.png";
-import jeringuillaIcon from "../../assets/icons/jeringuilla.png";
+import veterinarioIcon from "../../assets/icons/veterinario.png";
+import estudioIcon from "../../assets/icons/genetica.png";
+import vacunaIcon from "../../assets/icons/vacuna.png";
 import agendaIcon from "../../assets/icons/agenda.png";
 
 export default function AdminSidebar() {
@@ -34,13 +34,13 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink to="/administrador/veterinarios" className={itemClass}>
-          <img src={botiquinIcon} alt="Veterinarios" className="w-6 h-6 lg:w-7 lg:h-7 object-contain" />
+          <img src={veterinarioIcon} alt="Veterinarios" className="w-6 h-6 lg:w-7 lg:h-7 object-contain" />
           <span className="text-[11px] lg:text-[1.05rem]">Veterinarios</span>
         </NavLink>
 
         <NavLink to="/administrador/estudios" className={itemClass}>
           <img 
-            src={cirugiaIcon}
+            src={estudioIcon}
             alt="Estudios" 
             className="w-6 h-6 lg:w-7 lg:h-7 object-contain" 
             style={{ filter: "brightness(0) saturate(100%) invert(29%) sepia(50%) saturate(3193%) hue-rotate(256deg) brightness(89%) contrast(92%)" }}
@@ -49,7 +49,7 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink to="/administrador/tipos-vacuna" className={itemClass}>
-          <img src={jeringuillaIcon} alt="Tipos de Vacuna" className="w-6 h-6 lg:w-7 lg:h-7 object-contain" />
+          <img src={vacunaIcon} alt="Tipos de Vacuna" className="w-6 h-6 lg:w-7 lg:h-7 object-contain" />
           <span className="text-[11px] lg:text-[1.05rem]">
             <span className="lg:hidden">Vacunas</span>
             <span className="hidden lg:inline">Tipos de Vacuna</span>

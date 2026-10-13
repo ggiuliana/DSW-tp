@@ -82,6 +82,7 @@ export const mascotaRouter = Router()
  *         description: Lista de mascotas devuelta exitosamente
  */
 mascotaRouter.get('/', verificarToken(['mascotas:Leer']), findAll)
+
 /**
  * @swagger
  * /api/mascota/{id_mascota}:
@@ -101,16 +102,78 @@ mascotaRouter.get('/', verificarToken(['mascotas:Leer']), findAll)
  *         description: Mascota encontrada
  *       401:
  *         description: Token requerido o inválido
+ *   put:
+ *     summary: Modifica una mascota
+ *     tags: [Mascotas]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema: 
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Mascota'
+ *     responses:
+ *       200:
+ *         description: Mascota modificada
+ *       401:
+ *         description: Token requerido o inválido
+ *   patch:
+ *     summary: Modifica una mascota (parcial)
+ *     tags: [Mascotas]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema: 
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Mascota'
+ *     responses:
+ *       200:
+ *         description: Mascota modificada
+ *       401:
+ *         description: Token requerido o inválido
+ *   delete:
+ *     summary: Elimina una mascota
+ *     tags: [Mascotas]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Mascota eliminada
+ *       401:
+ *         description: Token requerido o inválido
  */
 mascotaRouter.get('/:id_mascota', verificarToken(['mascotas:Leer']), validateParams(idParams('id_mascota')), findOne)
+mascotaRouter.put('/:id_mascota', verificarToken(['mascotas:Actualizar']), validateParams(idParams('id_mascota')), validate(mascotaSchema), update)
+mascotaRouter.patch('/:id_mascota', verificarToken(['mascotas:Actualizar']), validateParams(idParams('id_mascota')), validate(mascotaPatchSchema), patch)
+mascotaRouter.delete('/:id_mascota', verificarToken(['mascotas:Eliminar']), validateParams(idParams('id_mascota')), remove)
+
 /**
  * @swagger
  * /api/mascota/duenio/{id_duenio}:
  *   get:
  *     summary: Obtiene las mascotas de un dueño
  *     tags: [Mascotas]
- *     security:
- *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id_duenio
@@ -119,12 +182,25 @@ mascotaRouter.get('/:id_mascota', verificarToken(['mascotas:Leer']), validatePar
  *           type: integer
  *     responses:
  *       200:
- *         description: Mascotas del dueño encontradas
- *       401:
- *         description: Token requerido o inválido
+ *         description: OK
+ *   post:
+ *     summary: Añade una mascota
+ *     tags: [Mascotas]
+ *     parameters:
+ *       - in: path
+ *         name: id_duenio
+ *         required: true
+ *         schema: 
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Mascota'
+ *     responses:
+ *       200:
+ *         description: OK
  */
 mascotaRouter.get('/duenio/:id_duenio', verificarToken(['mascotas:Leer']), validateParams(idParams('id_duenio')), findByDuenio)
 mascotaRouter.post('/duenio/:id_duenio', verificarToken(['mascotas:Agregar']), validateParams(idParams('id_duenio')), validate(mascotaSchema), add)
-mascotaRouter.put('/:id_mascota', verificarToken(['mascotas:Actualizar']), validateParams(idParams('id_mascota')), validate(mascotaSchema), update)
-mascotaRouter.patch('/:id_mascota', verificarToken(['mascotas:Actualizar']), validateParams(idParams('id_mascota')), validate(mascotaPatchSchema), patch)
-mascotaRouter.delete('/:id_mascota', verificarToken(['mascotas:Eliminar']), validateParams(idParams('id_mascota')), remove)
