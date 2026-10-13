@@ -56,6 +56,10 @@ export class TurnoService {
     return turnoRepository.findByVeterinario(idVet)
   }
 
+  async findDisponiblesByVeterinarioAndFecha(idVet: number, fechaInicio: string, fechaFin: string) {
+    return turnoRepository.findDisponiblesByVeterinarioAndFecha(idVet, fechaInicio, fechaFin)
+  }
+
   async findTurnosByVeterinarioAndFecha(idVet: number, fechaInicio: string, fechaFin: string) {
     return turnoRepository.findTurnosByVeterinarioAndFecha(idVet, fechaInicio, fechaFin)
   }

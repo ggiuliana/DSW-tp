@@ -39,6 +39,21 @@ async function findTurnosByVeterinarioAndFecha(req: Request, res: Response) {
   return res.status(200).json({ message: 'Turnos confirmados encontrados', data: turnos })
 }
 
+async function findDisponiblesByVeterinarioAndFecha(req: Request, res: Response) {
+  const autenticado = req as AuthenticatedRequest
+  if (autenticado.usuario?.rol !== 'Duenio') throw new Error('TURNOS_OWNER_ONLY')
+  const query = turnosFechaQuerySchema.safeParse(req.query)
+  if (!query.success) {
+    return res.status(400).json({ message: 'Rango de fechas inválido', details: query.error.flatten() })
+  }
+  const turnos = await turnoService.findDisponiblesByVeterinarioAndFecha(
+    Number(req.params.id_vet),
+    query.data.fechaInicio,
+    query.data.fechaFin,
+  )
+  return res.status(200).json({ message: 'Disponibilidades encontradas', data: turnos })
+}
+
 async function add(req: Request, res: Response) {
   if ((req as AuthenticatedRequest).usuario?.rol === 'Veterinario') req.body.estado_turno = 'Pendiente'
   const turno = await turnoService.add(req.body)
@@ -85,4 +100,4 @@ async function remove(req: Request, res: Response) {
   return res.status(200).json({ message: 'Turno removed', data: turno })
 }
 
-export { findAll, findParaDuenio, findOne, findByVeterinario, findTurnosByVeterinarioAndFecha, add, update, patch, otorgar, remove }
+export { findAll, findParaDuenio, findOne, findByVeterinario, findTurnosByVeterinarioAndFecha, findDisponiblesByVeterinarioAndFecha, add, update, patch, otorgar, remove }

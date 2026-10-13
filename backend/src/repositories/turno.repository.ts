@@ -21,6 +21,22 @@ export class TurnoRepository {
     })
   }
 
+  findDisponiblesByVeterinarioAndFecha(idVet: number, fechaInicio: string, fechaFin: string) {
+    const query: FilterQuery<Turno> = {
+      veterinario: { id_persona: idVet },
+      estado_turno: 'Pendiente',
+      mascota: null,
+      fecha_turno: {
+        $gte: new Date(`${fechaInicio}T00:00:00.000Z`),
+        $lte: new Date(`${fechaFin}T00:00:00.000Z`),
+      },
+    }
+    return em.find(Turno, query, {
+      populate: ['mascota', 'veterinario'],
+      orderBy: { fecha_turno: 'ASC', hora_turno: 'ASC' },
+    })
+  }
+
   findTurnosByVeterinarioAndFecha(idVet: number, fechaInicio: string, fechaFin: string) {
     const query: FilterQuery<Turno> = {
       veterinario: { id_persona: idVet },

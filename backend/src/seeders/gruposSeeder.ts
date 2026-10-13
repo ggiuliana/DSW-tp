@@ -10,6 +10,7 @@ export class GrupoPermisoSeeder extends Seeder {
 
     const configuracionDuenio: Record<string, string[]> = {
     duenios: ['Leer', 'Actualizar'],
+    veterinarios: ['Leer'],
     turnos: ['Leer', 'Actualizar'],
     consultas: ['Leer'],
     usuarios: ['Leer', 'Actualizar'],
