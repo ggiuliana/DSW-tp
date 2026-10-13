@@ -5,6 +5,7 @@ import VerMascotas from "./MascotasDuenio";
 import VerPerfil from "./PerfilDuenio"
 import HistoriaClinica from "../veterinario/HistoriaClinica";
 import TurnosDuenio from "./TurnosDuenio";
+import InicioDuenio from "./InicioDuenio";
 import logoVet from "../../assets/logoVet.png";
 
 function PanelDuenio() {
@@ -34,16 +35,7 @@ function PanelDuenio() {
             case "/duenio/perfil":
                 return <VerPerfil />;
             default:
-                return (
-                <div className="flex flex-col gap-7">
-                    <h1 className="font-plusjakarta text-3xl text-black">
-                        Hola, {nombre}
-                    </h1>
-                    <div className="bg-white py-10">
-                        No hay turnos próximos
-                    </div>
-                </div>
-                );
+                return <InicioDuenio nombre={nombre} />;
         }
     }
 

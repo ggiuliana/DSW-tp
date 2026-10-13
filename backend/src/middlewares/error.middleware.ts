@@ -26,6 +26,7 @@ const errorDefinitions: Record<string, ErrorDefinition> = {
   MASCOTA_NOT_FOUND: { status: 404, message: 'No se encontró la mascota' },
   VETERINARIO_NOT_FOUND: { status: 404, message: 'No se encontró el veterinario' },
   TURNO_INVALID_DATE: { status: 400, message: 'La fecha del turno no es válida' },
+  TURNO_DATE_IN_PAST: { status: 400, message: 'No se pueden crear turnos para fechas anteriores a hoy' },
   TURNO_INVALID_WEEKDAY: { status: 400, message: 'Solo se pueden crear turnos de lunes a sábado' },
   TURNO_INVALID_TIME: { status: 400, message: 'El horario debe estar entre las 09:00 y las 19:00, en intervalos de 45 minutos' },
   TURNO_MINIMUM_INTERVAL: { status: 409, message: 'Debe haber al menos 45 minutos entre turnos del mismo día' },

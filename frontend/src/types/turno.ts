@@ -9,3 +9,20 @@ export interface Turno {
   mascota?: MascotaTurno;
   veterinario?: { nombre: string; apellido: string };
 }
+
+export interface EstudioConsultaTurno {
+  id_estudio: number;
+  nombre_estudio: string;
+  descripcion_estudio: string;
+  precio_estudio: number;
+}
+
+export interface ConsultaTurno {
+  id_consulta: number;
+  diagnostico: string;
+  tratamiento: string;
+  peso: number;
+  observaciones?: string;
+  estudios?: EstudioConsultaTurno[];
+  turno: Turno;
+}

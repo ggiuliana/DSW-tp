@@ -50,7 +50,8 @@ function PanelInicioVeterinario({ nombre }: { nombre: string }) {
             : <p className="bg-white p-5 text-gray-600">No tienes turnos confirmados pendientes para hoy.</p>}
       </section>
 
-      <section aria-labelledby="calendario-titulo" className="border-t border-violet-200 pt-6">
+      <div className="grid items-start gap-6 border-t border-violet-200 pt-6 md:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)] md:gap-8">
+      <section aria-labelledby="calendario-titulo" className="space-y-4 md:col-start-1 md:row-start-1">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-violet-700">Agenda</p>
@@ -90,14 +91,16 @@ function PanelInicioVeterinario({ nombre }: { nombre: string }) {
           })}
         </div>
 
-        <section aria-live="polite" className="mt-6 space-y-3">
+      </section>
+
+      <section aria-live="polite" className="space-y-3 md:col-start-2 md:row-start-1">
           <h3 className="text-lg font-semibold text-violet-950">Turnos del {fechaLegible(fechaSeleccionada)}</h3>
           {cargandoMes ? <p className="bg-white p-5 text-gray-600">Cargando calendario...</p>
             : turnosFechaSeleccionada.length
               ? <ListaTurnosVeterinario turnos={turnosFechaSeleccionada} />
               : <p className="bg-white p-5 text-gray-600">No hay turnos confirmados para este día.</p>}
-        </section>
       </section>
+      </div>
     </section>
   );
 }

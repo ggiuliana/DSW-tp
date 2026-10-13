@@ -24,6 +24,11 @@ function claveFecha(fecha: Date) {
   return fecha.toISOString().slice(0, 10)
 }
 
+function fechaLocalActual() {
+  const ahora = new Date()
+  return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`
+}
+
 function horaParaBaseDatos(hora: TimeOnly): `${number}:${number}:${number}` {
   const [horas, minutos, segundos = '00'] = hora.split(':')
   return `${horas}:${minutos}:${segundos}` as `${number}:${number}:${number}`
@@ -65,6 +70,7 @@ export class TurnoService {
   }
 
   async add(data: TurnoData) {
+    if (claveFecha(data.fecha_turno) < fechaLocalActual()) throw new Error('TURNO_DATE_IN_PAST')
     await this.validarDisponibilidad(data.fecha_turno, data.hora_turno, data.id_veterinario)
     const veterinario = await veterinarioRepository.findById(data.id_veterinario)
     if (!veterinario) throw new Error('VETERINARIO_NOT_FOUND')

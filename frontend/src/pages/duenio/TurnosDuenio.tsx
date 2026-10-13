@@ -5,7 +5,9 @@ import { fechaLegible } from "../../utils/fechaLegible";
 function TurnosDuenio() {
   const {
     mascotas,
-    propios,
+    turnoMasProximo,
+    restoTurnosProximos,
+    consultasPasadas,
     cargando,
     error,
     confirmacion,
@@ -83,7 +85,8 @@ function TurnosDuenio() {
           </div>
 
           {veterinarioSeleccionado && calendarioAbierto && (
-            <section className="space-y-5 border-t border-violet-100 pt-5">
+            <section className="grid items-start gap-5 border-t border-violet-100 pt-5 md:grid-cols-[minmax(0,1fr)_minmax(17rem,20rem)] md:gap-8">
+              <div className="space-y-5 md:col-start-1 md:row-start-1">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold capitalize text-violet-950">{nombreMes}</h2>
                 <div className="flex gap-2">
@@ -112,8 +115,9 @@ function TurnosDuenio() {
                   );
                 })}
               </div>
+              </div>
 
-              <section aria-live="polite" className="space-y-3">
+              <section aria-live="polite" className="space-y-3 md:col-start-2 md:row-start-1">
                 <h3 className="text-lg font-semibold text-violet-950">Horarios del {fechaLegible(fechaSeleccionada)}</h3>
                 {cargandoDisponibilidad ? <p className="bg-white p-5 text-gray-600">Cargando disponibilidad...</p>
                   : turnosDiaSeleccionado.length ? (
@@ -149,14 +153,41 @@ function TurnosDuenio() {
         </div>
       )}
 
-      <section>
-        <h2 className="mb-3 text-xl font-semibold text-violet-950">Turnos de mis mascotas</h2>
-        {propios.length ? <div className="divide-y divide-violet-100 bg-white shadow-sm">
-          {propios.map((turno) => <article key={turno.id_turno} className="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-            <div><p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p><p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p></div>
-            <span className="w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">{turno.estado_turno}</span>
-          </article>)}
-        </div> : <p className="bg-white p-5 text-gray-600">Todavía no tienes turnos asignados a tus mascotas.</p>}
+      <section className="space-y-8 border-t border-violet-200 pt-6">
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold text-violet-950">Turnos próximos</h2>
+          {turnoMasProximo || restoTurnosProximos.length ? <div className="divide-y divide-violet-100 bg-white">
+            {[...(turnoMasProximo ? [turnoMasProximo] : []), ...restoTurnosProximos].map((turno) => <article key={turno.id_turno} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+              <div><p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p><p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p></div>
+              <span className="w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">{turno.estado_turno}</span>
+            </article>)}
+          </div> : <p className="bg-white p-5 text-gray-600">No tienes turnos próximos confirmados.</p>}
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold text-violet-950">Turnos pasados con consulta</h2>
+          {consultasPasadas.length ? <div className="divide-y divide-violet-100 bg-white">
+            {consultasPasadas.map(({ turno, consulta }) => <article key={turno.id_turno} className="px-5 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div><p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p><p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p></div>
+                <span className="w-fit rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">{turno.estado_turno}</span>
+              </div>
+              <details className="mt-3 border-t border-violet-100 pt-3">
+                <summary className="w-fit cursor-pointer text-sm font-semibold text-violet-800 hover:text-violet-950">Ver consulta</summary>
+                <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+                  <div><dt className="font-semibold text-gray-500">Diagnóstico</dt><dd className="mt-1 text-gray-800">{consulta.diagnostico}</dd></div>
+                  <div><dt className="font-semibold text-gray-500">Tratamiento</dt><dd className="mt-1 text-gray-800">{consulta.tratamiento}</dd></div>
+                  <div><dt className="font-semibold text-gray-500">Peso</dt><dd className="mt-1 text-gray-800">{consulta.peso} kg</dd></div>
+                  {consulta.observaciones && <div><dt className="font-semibold text-gray-500">Observaciones</dt><dd className="mt-1 text-gray-800">{consulta.observaciones}</dd></div>}
+                </dl>
+                {consulta.estudios?.length ? <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-700">Estudios realizados</h3>
+                  <ul className="mt-2 space-y-2">{consulta.estudios.map((estudio) => <li key={estudio.id_estudio} className="border-l-2 border-violet-200 pl-3 text-sm"><p className="font-medium text-violet-950">{estudio.nombre_estudio}</p><p className="text-gray-600">{estudio.descripcion_estudio}</p></li>)}</ul>
+                </div> : null}
+              </details>
+            </article>)}
+          </div> : <p className="bg-white p-5 text-gray-600">Todavía no tienes consultas asociadas a turnos pasados.</p>}
+        </section>
       </section>
     </section>
   );

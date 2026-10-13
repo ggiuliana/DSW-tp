@@ -1,15 +1,17 @@
 import { useState, useEffect, useMemo } from 'react';
-import type { Turno, MascotaTurno } from '../types';
+import type { ConsultaTurno, Turno, MascotaTurno } from '../types';
 import type { Veterinario } from '../types/veterinario.js';
 import { obtenerTurnosDuenio, obtenerMascotasDuenio, obtenerVeterinariosParaTurno, obtenerDisponibilidadVeterinario, otorgarTurno } from '../services/turnosService';
+import { obtenerConsultasDuenio } from '../services/consultasService.js';
 
 function fechaLocal(fecha: Date) {
     return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
 }
 
-export const useTurnosDuenio = () => {
+export const useTurnosDuenio = (cargarOpcionesReserva = true) => {
     const [mascotas, setMascotas] = useState<MascotaTurno[]>([]);
     const [turnos, setTurnos] = useState<Turno[]>([]);
+    const [consultas, setConsultas] = useState<ConsultaTurno[]>([]);
     const [veterinarios, setVeterinarios] = useState<Veterinario[]>([]);
     const [cargando, setCargando] = useState(true);
     const [cargandoDisponibilidad, setCargandoDisponibilidad] = useState(false);
@@ -39,16 +41,18 @@ export const useTurnosDuenio = () => {
             }
 
             try {
-                const [turnosCargados, mascotasCargadas, veterinariosCargados] = await Promise.all([
+                const [turnosCargados, mascotasCargadas, veterinariosCargados, consultasCargadas] = await Promise.all([
                     obtenerTurnosDuenio(),
                     obtenerMascotasDuenio(idPersona),
-                    obtenerVeterinariosParaTurno(),
+                    cargarOpcionesReserva ? obtenerVeterinariosParaTurno() : Promise.resolve([]),
+                    obtenerConsultasDuenio(),
                 ]);
                 
                 if (!activo) return;
                 setTurnos(turnosCargados);
                 setMascotas(mascotasCargadas);
                 setVeterinarios(veterinariosCargados);
+                setConsultas(consultasCargadas);
             } catch (err) {
                 if (activo) setError(err instanceof Error ? err.message : "No se pudieron cargar los turnos.");
             } finally {
@@ -58,7 +62,7 @@ export const useTurnosDuenio = () => {
         
         void cargar();
         return () => { activo = false; };
-    }, []);
+    }, [cargarOpcionesReserva]);
 
     useEffect(() => {
         if (!veterinarioSeleccionado) return;
@@ -95,6 +99,28 @@ export const useTurnosDuenio = () => {
         .filter((turno) => mascotas.some((mascota) => mascota.id_mascota === turno.mascota?.id_mascota))
         .sort((a, b) => `${a.fecha_turno}T${a.hora_turno}`.localeCompare(`${b.fecha_turno}T${b.hora_turno}`)),
     [turnos, mascotas]);
+
+    const ahora = new Date();
+    const fechaHoy = fechaLocal(ahora);
+    const horaActual = `${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
+    const fechaHoraActual = `${fechaHoy}T${horaActual}`;
+    const turnosConfirmados = propios.filter((turno) => turno.estado_turno.toLowerCase() === 'confirmado');
+    const turnosProximos = turnosConfirmados
+        .filter((turno) => `${turno.fecha_turno.slice(0, 10)}T${turno.hora_turno.slice(0, 5)}` >= fechaHoraActual)
+        .sort((a, b) => `${a.fecha_turno}T${a.hora_turno}`.localeCompare(`${b.fecha_turno}T${b.hora_turno}`));
+    const consultasPorTurno = new Map(consultas.map((consulta) => [consulta.turno.id_turno, consulta]));
+    const consultasPasadas = turnosConfirmados
+        .filter((turno) => `${turno.fecha_turno.slice(0, 10)}T${turno.hora_turno.slice(0, 5)}` < fechaHoraActual)
+        .flatMap((turno) => {
+            const consulta = consultasPorTurno.get(turno.id_turno);
+            return consulta ? [{ turno, consulta }] : [];
+        })
+        .sort((a, b) => `${b.turno.fecha_turno}T${b.turno.hora_turno}`.localeCompare(`${a.turno.fecha_turno}T${a.turno.hora_turno}`));
+    const turnoMasProximo = turnosProximos[0] ?? null;
+    const restoTurnosProximos = turnosProximos.slice(1);
+    const diasHastaProximo = turnoMasProximo
+        ? Math.round((Date.parse(`${turnoMasProximo.fecha_turno.slice(0, 10)}T00:00:00`) - Date.parse(`${fechaHoy}T00:00:00`)) / 86_400_000)
+        : null;
 
     const cambiarEspecialidad = (especialidad: string) => {
         setEspecialidadSeleccionada(especialidad);
@@ -168,7 +194,8 @@ export const useTurnosDuenio = () => {
     };
 
     return {
-        mascotas, propios, cargando, error, confirmacion,
+        mascotas, propios, cargando, error, confirmacion, consultasPasadas,
+        turnoMasProximo, restoTurnosProximos, diasHastaProximo,
         especialidades, especialidadSeleccionada, veterinariosEspecialidad, veterinarioSeleccionado,
         turnosDisponibles, diasDisponibles, fechaSeleccionada, mesVisible, turnosDiaSeleccionado,
         cargandoDisponibilidad, turnoSeleccionado, mascotaSeleccionada, reservando, calendarioAbierto,

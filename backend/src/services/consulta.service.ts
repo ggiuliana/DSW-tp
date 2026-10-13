@@ -7,6 +7,7 @@ import { turnoRepository } from '../repositories/turno.repository.js'
 import { Estudio } from '../entities/estudio.entity.js'
 import { Medicamento } from '../entities/medicamento.entity.js'
 import { MedicamentosUsados } from '../entities/medicamentos_usados.entity.js'
+import { usuarioRepository } from '../repositories/usuario.repository.js'
 
 export type ConsultaData = {
   diagnostico: string
@@ -25,6 +26,12 @@ export class ConsultaService {
 
   async findOne(id: number) {
     return consultaRepository.findById(id)
+  }
+
+  async findParaDuenio(idUsuario: number) {
+    const usuario = await usuarioRepository.findByIdWithPersona(idUsuario)
+    if (!usuario?.persona?.id_persona) throw new Error('TURNO_OWNER_PROFILE_NOT_FOUND')
+    return consultaRepository.findByDuenioId(usuario.persona.id_persona)
   }
 
   async add(data: ConsultaData) {

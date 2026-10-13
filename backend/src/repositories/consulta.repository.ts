@@ -14,6 +14,12 @@ export class ConsultaRepository {
         return em.findOne(Consulta, { id_consulta: id }, { populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno', 'turno.mascota', 'turno.veterinario'] });
     }
 
+    findByDuenioId(idDuenio: number) {
+        return em.find(Consulta, {
+            turno: { mascota: { duenio: { id_persona: idDuenio } } },
+        }, { populate: ['estudios', 'turno', 'turno.mascota', 'turno.veterinario'] });
+    }
+
     add(data: ConsultaCreateData){
         const consulta = new Consulta();
         Object.assign(consulta, data);
