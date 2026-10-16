@@ -124,7 +124,7 @@ function TurnosDuenio() {
                     <div className="flex flex-wrap gap-2">
                       {turnosDiaSeleccionado.map((turno) => <button key={turno.id_turno} type="button" onClick={() => abrirConfirmacionTurno(turno)} className="min-w-20 rounded-md border border-violet-300 bg-white px-4 py-3 text-sm font-semibold text-violet-900 hover:bg-violet-100">{turno.hora_turno.slice(0, 5)}</button>)}
                     </div>
-                  ) : <p className="bg-white p-5 text-gray-600">No hay horarios pendientes para este día.</p>}
+                  ) : <p className="bg-white p-5 text-gray-600">No hay turnos disponibles para este día.</p>}
               </section>
             </section>
           )}
