@@ -3,7 +3,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import VerMascotas from "./MascotasDuenio";
 import VerPerfil from "./PerfilDuenio"
-import HistoriaClinica from "../veterinario/HistoriaClinica";
+import HistoriaClinica from "./HistoriaClinica";
+import ConsultaDetalle from "./ConsultaDetalle";
 import TurnosDuenio from "./TurnosDuenio";
 import InicioDuenio from "./InicioDuenio";
 import logoVet from "../../assets/logoVet.png";
@@ -11,8 +12,7 @@ import logoVet from "../../assets/logoVet.png";
 function PanelDuenio() {
     const nombre = localStorage.getItem("nombrePersona") || "usuario";
     const { pathname } = useLocation();
-    const { id_mascota } = useParams();
-
+    const { id_mascota, id_consulta } = useParams();
     const navigate = useNavigate()
     const logOut = () => {
         localStorage.removeItem("token");
@@ -23,6 +23,10 @@ function PanelDuenio() {
     };
 
     function renderContenido() {
+        if (pathname.includes("/consulta/") && id_consulta) {
+            return <ConsultaDetalle />;
+        }
+
         if (pathname.startsWith("/duenio/mascotas/") && id_mascota) {
             return <HistoriaClinica idMascota={id_mascota} />;
         }
@@ -57,7 +61,6 @@ function PanelDuenio() {
             <DuenioFooter />
         </main>
     );
-
 }
 
 export default PanelDuenio;

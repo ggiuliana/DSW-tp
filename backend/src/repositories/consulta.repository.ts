@@ -20,6 +20,18 @@ export class ConsultaRepository {
         }, { populate: ['estudios', 'turno', 'turno.mascota', 'turno.veterinario'] });
     }
 
+    findByMascotaResueltos(idMascota: number) {
+        return em.find(Consulta, {
+            turno: { 
+                mascota: { id_mascota: idMascota },
+                estado_turno: 'Resuelto'
+            }
+        }, { 
+            populate: ['estudios', 'medicamentosUsados', 'medicamentosUsados.medicamento', 'turno', 'turno.veterinario'],
+            orderBy: { turno: { fecha_turno: 'DESC', hora_turno: 'DESC' } }
+        });
+    }
+
     add(data: ConsultaCreateData){
         const consulta = new Consulta();
         Object.assign(consulta, data);

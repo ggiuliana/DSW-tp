@@ -22,6 +22,20 @@ interface Mascota {
     vacunas?: VacunaAplicada[];
 }
 
+interface TurnoConsulta {
+    fecha_turno: string;
+    hora_turno: string;
+}
+
+interface ConsultaHistorial {
+    id_consulta: number;
+    diagnostico: string;
+    tratamiento: string;
+    peso: number;
+    observaciones?: string;
+    turno: TurnoConsulta;
+}
+
 function fechaLegible(fecha: string) {
     return new Date(`${fecha.slice(0, 10)}T00:00:00`).toLocaleDateString("es-AR");
 }
@@ -31,6 +45,9 @@ function HistoriaClinica({ idMascota }: { idMascota: string }) {
     const [mascota, setMascota] = useState<Mascota | null>(null);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
+
+    const [consultas, setConsultas] = useState<ConsultaHistorial[]>([]);
+    const [cargandoConsultas, setCargandoConsultas] = useState(true);
 
     useEffect(() => {
         let cancelado = false;
@@ -59,6 +76,32 @@ function HistoriaClinica({ idMascota }: { idMascota: string }) {
                 if (!cancelado) setCargando(false);
             });
 
+        return () => { cancelado = true; };
+    }, [idMascota]);
+
+    useEffect(() => {
+        let cancelado = false;
+        const cargarConsultas = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const response = await fetch(`http://localhost:3000/api/consulta/mascota/${idMascota}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const resultado = await response.json();
+                
+                if (response.ok && !cancelado) {
+                    setConsultas(resultado.data || []);
+                }
+            } catch (err) {
+                console.error("Error al cargar consultas:", err);
+            } finally {
+                if (!cancelado) setCargandoConsultas(false);
+            }
+        };
+
+        cargarConsultas();
         return () => { cancelado = true; };
     }, [idMascota]);
 
@@ -131,12 +174,35 @@ function HistoriaClinica({ idMascota }: { idMascota: string }) {
                         )}
                     </section>
 
-                    <section className="min-h-40 rounded-lg border border-dashed border-gray-300 bg-white p-5">
+                    <section className="min-h-40 rounded-lg bg-white p-5 shadow-sm">
                         <h2 className="text-xl font-semibold text-violet-950">Consultas</h2>
-                        <p className="mt-3 text-sm text-gray-500">El historial de consultas se incorporará aquí.</p>
+                        
+                        {cargandoConsultas ? (
+                            <p className="mt-4 text-sm text-gray-600">Cargando consultas...</p>
+                        ) : consultas.length === 0 ? (
+                            <p className="mt-4 text-sm text-gray-600">El historial de consultas se incorporará aquí.</p>
+                        ) : (
+                            <ul className="mt-3 divide-y divide-gray-100">
+                                {consultas.map((consulta) => (
+                                    <li 
+                                        key={consulta.id_consulta} 
+                                        onClick={() => navigate(`/duenio/mascotas/${idMascota}/historia/consulta/${consulta.id_consulta}`)}
+                                        className="flex cursor-pointer flex-wrap items-center justify-between gap-4 py-4 transition-colors hover:bg-violet-50 px-2 rounded-md"
+                                    >
+                                        <div>
+                                            <p className="font-medium text-gray-900">{fechaLegible(consulta.turno.fecha_turno)}</p>
+                                            <p className="mt-1 text-sm text-gray-500 line-clamp-1 max-w-[250px]">{consulta.diagnostico}</p>
+                                        </div>
+                                        <button className="text-sm font-semibold text-violet-700 hover:text-violet-900">
+                                            Ver detalle &rarr;
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </section>
                 </div>
-            </div>
+            </div>           
         </section>
     );
 }
