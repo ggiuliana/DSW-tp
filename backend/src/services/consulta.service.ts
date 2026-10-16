@@ -34,11 +34,16 @@ export class ConsultaService {
     return consultaRepository.findByDuenioId(usuario.persona.id_persona)
   }
 
+  async findPorMascotaResueltos(idMascota: number) {
+    return consultaRepository.findByMascotaResueltos(idMascota);
+  }
+
   async add(data: ConsultaData) {
     const turno = await turnoRepository.findById(data.id_turno)
     if (!turno) throw new Error('TURNO_NOT_FOUND')
     this.validarTurnoConfirmado(turno.estado_turno)
 
+    turno.estado_turno = 'Resuelto';
     const { id_turno: _idTurno, id_estudios, medicamentos_usados, ...consultaData } = data
     const consulta = consultaRepository.add({ ...consultaData, turno })
 
@@ -48,6 +53,7 @@ export class ConsultaService {
     }
     return consultaRepository.save(consulta)
   }
+  
 
   async update(id: number, data: ConsultaData) {
     const consulta = await consultaRepository.findById(id)

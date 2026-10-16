@@ -43,4 +43,9 @@ async function remove(req: Request, res: Response) {
   return res.status(200).json({ message: 'Consulta removed', data: consulta })
 }
 
-export { findAll, findParaDuenio, findOne, add, update, patch, remove }
+async function findPorMascota(req: Request, res: Response) {
+  const consultas = await consultaService.findPorMascotaResueltos(Number(req.params.id_mascota));
+  return res.status(200).json({ message: 'Consultas de la mascota encontradas', data: consultas });
+}
+
+export { findAll, findParaDuenio, findOne, add, update, patch, remove, findPorMascota }
