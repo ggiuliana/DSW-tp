@@ -9,7 +9,6 @@ export const useTurnosAdministrador = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
-  // Estados para los filtros
   const [filtroVet, setFiltroVet] = useState<string>("");
   const [filtroEstado, setFiltroEstado] = useState<string>("");
   const [fechaDesde, setFechaDesde] = useState<string>("");
@@ -43,22 +42,19 @@ export const useTurnosAdministrador = () => {
     return () => { activo = false; };
   }, []);
 
-  // Lógica de filtrado
   const turnosFiltrados = useMemo(() => {
     const hoy = new Date();
     const mesActual = hoy.getMonth();
     const anioActual = hoy.getFullYear();
 
     return turnos.filter((turno) => {
-      // 1. Filtro por Veterinario
+
       if (filtroVet && turno.veterinario?.id_persona?.toString() !== filtroVet) return false;
       
-      // 2. Filtro por Estado
       if (filtroEstado && turno.estado_turno !== filtroEstado) return false;
 
-      // 3. Filtro por Rango de Fechas
       const fechaTurno = new Date(turno.fecha_turno);
-      fechaTurno.setHours(0, 0, 0, 0); // Normalizar hora para evitar falsos negativos
+      fechaTurno.setHours(0, 0, 0, 0);
 
       if (fechaDesde || fechaHasta) {
         if (fechaDesde) {
@@ -72,7 +68,6 @@ export const useTurnosAdministrador = () => {
           if (fechaTurno > hasta) return false;
         }
       } else {
-        // Si no hay ninguna fecha seleccionada, mostramos solo los del mes actual
         if (fechaTurno.getMonth() !== mesActual || fechaTurno.getFullYear() !== anioActual) return false;
       }
 
