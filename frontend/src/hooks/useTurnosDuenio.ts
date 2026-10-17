@@ -29,6 +29,10 @@ export const useTurnosDuenio = (cargarOpcionesReserva = true) => {
     const [turnoSeleccionado, setTurnoSeleccionado] = useState<Turno | null>(null);
     const [mascotaSeleccionada, setMascotaSeleccionada] = useState("");
     const [calendarioAbierto, setCalendarioAbierto] = useState(true);
+    const [filtroProximosDesde, setFiltroProximosDesde] = useState("");
+    const [filtroProximosHasta, setFiltroProximosHasta] = useState("");
+    const [filtroAnterioresDesde, setFiltroAnterioresDesde] = useState("");
+    const [filtroAnterioresHasta, setFiltroAnterioresHasta] = useState("");
 
     useEffect(() => {
         let activo = true;
@@ -104,23 +108,34 @@ export const useTurnosDuenio = (cargarOpcionesReserva = true) => {
     const fechaHoy = fechaLocal(ahora);
     const horaActual = `${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
     const fechaHoraActual = `${fechaHoy}T${horaActual}`;
-    const turnosConfirmados = propios.filter((turno) => turno.estado_turno.toLowerCase() === 'confirmado');
-    const turnosProximos = turnosConfirmados
-        .filter((turno) => `${turno.fecha_turno.slice(0, 10)}T${turno.hora_turno.slice(0, 5)}` >= fechaHoraActual)
-        .sort((a, b) => `${a.fecha_turno}T${a.hora_turno}`.localeCompare(`${b.fecha_turno}T${b.hora_turno}`));
     const consultasPorTurno = new Map(consultas.map((consulta) => [consulta.turno.id_turno, consulta]));
-    const consultasPasadas = turnosConfirmados
-        .filter((turno) => `${turno.fecha_turno.slice(0, 10)}T${turno.hora_turno.slice(0, 5)}` < fechaHoraActual)
-        .flatMap((turno) => {
-            const consulta = consultasPorTurno.get(turno.id_turno);
-            return consulta ? [{ turno, consulta }] : [];
-        })
-        .sort((a, b) => `${b.turno.fecha_turno}T${b.turno.hora_turno}`.localeCompare(`${a.turno.fecha_turno}T${a.turno.hora_turno}`));
+    const turnosProximosBase = propios
+        .filter((turno) => turno.estado_turno.toLowerCase() === 'confirmado' && `${turno.fecha_turno.slice(0, 10)}T${turno.hora_turno.slice(0, 5)}` >= fechaHoraActual)
+        .sort((a, b) => `${a.fecha_turno}T${a.hora_turno}`.localeCompare(`${b.fecha_turno}T${b.hora_turno}`));
+    const turnosProximos = turnosProximosBase.filter(turno => {
+        const fecha = turno.fecha_turno.slice(0, 10);
+        if (filtroProximosDesde && fecha < filtroProximosDesde) return false;
+        if (filtroProximosHasta && fecha > filtroProximosHasta) return false;
+        return true;
+    });
     const turnoMasProximo = turnosProximos[0] ?? null;
     const restoTurnosProximos = turnosProximos.slice(1);
     const diasHastaProximo = turnoMasProximo
         ? Math.round((Date.parse(`${turnoMasProximo.fecha_turno.slice(0, 10)}T00:00:00`) - Date.parse(`${fechaHoy}T00:00:00`)) / 86_400_000)
         : null;
+    const consultasPasadasBase = propios
+        .filter((turno) => turno.estado_turno.toLowerCase() === 'resuelto')
+        .flatMap((turno) => {
+            const consulta = consultasPorTurno.get(turno.id_turno);
+            return consulta ? [{ turno, consulta }] : [];
+        })
+        .sort((a, b) => `${b.turno.fecha_turno}T${b.turno.hora_turno}`.localeCompare(`${a.turno.fecha_turno}T${a.turno.hora_turno}`));
+    const consultasPasadas = consultasPasadasBase.filter(({ turno }) => {
+        const fecha = turno.fecha_turno.slice(0, 10);
+        if (filtroAnterioresDesde && fecha < filtroAnterioresDesde) return false;
+        if (filtroAnterioresHasta && fecha > filtroAnterioresHasta) return false;
+        return true;
+    });
 
     const cambiarEspecialidad = (especialidad: string) => {
         setEspecialidadSeleccionada(especialidad);
@@ -199,7 +214,9 @@ export const useTurnosDuenio = (cargarOpcionesReserva = true) => {
         especialidades, especialidadSeleccionada, veterinariosEspecialidad, veterinarioSeleccionado,
         turnosDisponibles, diasDisponibles, fechaSeleccionada, mesVisible, turnosDiaSeleccionado,
         cargandoDisponibilidad, turnoSeleccionado, mascotaSeleccionada, reservando, calendarioAbierto,
+        filtroProximosDesde, filtroProximosHasta, filtroAnterioresDesde, filtroAnterioresHasta,
         cambiarEspecialidad, cambiarVeterinario, cambiarMes, seleccionarFecha,
         abrirConfirmacionTurno, cerrarConfirmacionTurno, setMascotaSeleccionada, confirmarTurno, sacarOtroTurno,
+        setFiltroProximosDesde,  setFiltroProximosHasta, setFiltroAnterioresDesde, setFiltroAnterioresHasta,
     };
 };
