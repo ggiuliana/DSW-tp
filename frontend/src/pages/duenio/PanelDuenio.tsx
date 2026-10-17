@@ -5,6 +5,7 @@ import VerMascotas from "./MascotasDuenio";
 import VerPerfil from "./PerfilDuenio"
 import HistoriaClinica from "./HistoriaClinica";
 import ConsultaDetalle from "./ConsultaDetalle";
+import TurnoConsultaDetalle from "./TurnosConsultaDetalle";
 import TurnosDuenio from "./TurnosDuenio";
 import InicioDuenio from "./InicioDuenio";
 import logoVet from "../../assets/logoVet.png";
@@ -23,6 +24,11 @@ function PanelDuenio() {
     };
 
     function renderContenido() {
+
+        if (pathname.includes("/duenio/turnos/consulta/") && id_consulta) {
+            return <TurnoConsultaDetalle />;
+        }
+
         if (pathname.includes("/consulta/") && id_consulta) {
             return <ConsultaDetalle />;
         }

@@ -27,6 +27,7 @@ function App() {
                 <Route path="/duenio/mascotas/:id_mascota/historia" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/mascotas/:id_mascota/historia/consulta/:id_consulta" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/turnos" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
+                <Route path="/duenio/turnos/consulta/:id_consulta" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/duenio/perfil" element={<RutaProtegida rolRequerido="Duenio"><PanelDuenio /></RutaProtegida>} />
                 <Route path="/veterinario" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />
                 <Route path="/veterinario/turnos" element={<RutaProtegida rolRequerido="Veterinario"><PanelVeterinario /></RutaProtegida>} />

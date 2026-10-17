@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTurnosDuenio } from "../../hooks/useTurnosDuenio";
 import { fechaLegible } from "../../utils/fechaLegible";
 
@@ -24,6 +24,10 @@ function TurnosDuenio() {
     mascotaSeleccionada,
     reservando,
     calendarioAbierto,
+    filtroProximosDesde,
+    filtroProximosHasta,
+    filtroAnterioresDesde,
+    filtroAnterioresHasta,
     cambiarEspecialidad,
     cambiarVeterinario,
     cambiarMes,
@@ -33,7 +37,13 @@ function TurnosDuenio() {
     setMascotaSeleccionada,
     confirmarTurno,
     sacarOtroTurno,
+    setFiltroProximosDesde,
+    setFiltroProximosHasta,
+    setFiltroAnterioresDesde,
+    setFiltroAnterioresHasta,
   } = useTurnosDuenio();
+
+  const navigate = useNavigate();
 
   if (cargando) return <p className="text-gray-600">Cargando turnos...</p>;
 
@@ -154,39 +164,106 @@ function TurnosDuenio() {
       )}
 
       <section className="space-y-8 border-t border-violet-200 pt-6">
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-violet-950">Turnos próximos</h2>
-          {turnoMasProximo || restoTurnosProximos.length ? <div className="divide-y divide-violet-100 bg-white">
-            {[...(turnoMasProximo ? [turnoMasProximo] : []), ...restoTurnosProximos].map((turno) => <article key={turno.id_turno} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+       <section className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-4 border-b border-violet-100 pb-3">
+            <h2 className="text-xl font-semibold text-violet-950">Turnos próximos</h2>
+            
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-2 text-sm">
+              <span className="font-medium text-gray-500 mr-1 w-full sm:w-auto">Filtrar:</span>
+              <input 
+                type="date" 
+                value={filtroProximosDesde} 
+                max={filtroProximosHasta}
+                onChange={e => setFiltroProximosDesde(e.target.value)} 
+                className="rounded border-b border-gray-300 bg-transparent px-2 py-1 text-gray-700 outline-none transition-colors hover:border-violet-400 focus:border-violet-700 focus:bg-white" 
+                title="Fecha desde"
+              />
+              <span className="hidden text-gray-400 sm:inline">-</span>
+              <input 
+                type="date" 
+                value={filtroProximosHasta} 
+                min={filtroProximosDesde}
+                onChange={e => setFiltroProximosHasta(e.target.value)} 
+                className="rounded border-b border-gray-300 bg-transparent px-2 py-1 text-gray-700 outline-none transition-colors hover:border-violet-400 focus:border-violet-700 focus:bg-white" 
+                title="Fecha hasta"
+              />
+              {(filtroProximosDesde || filtroProximosHasta) && (
+                <button 
+                  type="button" 
+                  onClick={() => { setFiltroProximosDesde(""); setFiltroProximosHasta(""); }} 
+                  className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-800 transition-colors hover:bg-violet-200 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:ml-1"
+                >
+                  Borrar filtros
+                </button>
+              )}
+            </div>
+          </div>
+          
+          {turnoMasProximo || restoTurnosProximos.length ? <div className="divide-y divide-violet-100 rounded-lg bg-white shadow-sm border border-gray-100 overflow-hidden">
+            {[...(turnoMasProximo ? [turnoMasProximo] : []), ...restoTurnosProximos].map((turno) => <article key={turno.id_turno} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 hover:bg-violet-50/50 transition-colors">
               <div><p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p><p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p></div>
-              <span className="w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">{turno.estado_turno}</span>
+              <span className="w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800 border border-violet-100">{turno.estado_turno}</span>
             </article>)}
-          </div> : <p className="bg-white p-5 text-gray-600">No tienes turnos próximos confirmados.</p>}
+          </div> : <p className="rounded-lg bg-white p-5 text-gray-600 shadow-sm border border-gray-100">No hay turnos confirmados en este rango de fechas.</p>}
         </section>
 
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-violet-950">Turnos pasados con consulta</h2>
-          {consultasPasadas.length ? <div className="divide-y divide-violet-100 bg-white">
-            {consultasPasadas.map(({ turno, consulta }) => <article key={turno.id_turno} className="px-5 py-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div><p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p><p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p></div>
-                <span className="w-fit rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">{turno.estado_turno}</span>
-              </div>
-              <details className="mt-3 border-t border-violet-100 pt-3">
-                <summary className="w-fit cursor-pointer text-sm font-semibold text-violet-800 hover:text-violet-950">Ver consulta</summary>
-                <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
-                  <div><dt className="font-semibold text-gray-500">Diagnóstico</dt><dd className="mt-1 text-gray-800">{consulta.diagnostico}</dd></div>
-                  <div><dt className="font-semibold text-gray-500">Tratamiento</dt><dd className="mt-1 text-gray-800">{consulta.tratamiento}</dd></div>
-                  <div><dt className="font-semibold text-gray-500">Peso</dt><dd className="mt-1 text-gray-800">{consulta.peso} kg</dd></div>
-                  {consulta.observaciones && <div><dt className="font-semibold text-gray-500">Observaciones</dt><dd className="mt-1 text-gray-800">{consulta.observaciones}</dd></div>}
-                </dl>
-                {consulta.estudios?.length ? <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-gray-700">Estudios realizados</h3>
-                  <ul className="mt-2 space-y-2">{consulta.estudios.map((estudio) => <li key={estudio.id_estudio} className="border-l-2 border-violet-200 pl-3 text-sm"><p className="font-medium text-violet-950">{estudio.nombre_estudio}</p><p className="text-gray-600">{estudio.descripcion_estudio}</p></li>)}</ul>
-                </div> : null}
-              </details>
-            </article>)}
-          </div> : <p className="bg-white p-5 text-gray-600">Todavía no tienes consultas asociadas a turnos pasados.</p>}
+
+        <section className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-4 border-b border-violet-100 pb-3">
+            <h2 className="text-xl font-semibold text-violet-950">Turnos anteriores</h2>
+            
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-2 text-sm">
+              <span className="font-medium text-gray-500 mr-1 w-full sm:w-auto">Filtrar:</span>
+              <input 
+                type="date" 
+                value={filtroAnterioresDesde} 
+                max={filtroAnterioresHasta}
+                onChange={e => setFiltroAnterioresDesde(e.target.value)} 
+                className="rounded border-b border-gray-300 bg-transparent px-2 py-1 text-gray-700 outline-none transition-colors hover:border-violet-400 focus:border-violet-700 focus:bg-white" 
+                title="Fecha desde"
+              />
+              <span className="hidden text-gray-400 sm:inline">-</span>
+              <input 
+                type="date" 
+                value={filtroAnterioresHasta} 
+                min={filtroAnterioresDesde}
+                onChange={e => setFiltroAnterioresHasta(e.target.value)} 
+                className="rounded border-b border-gray-300 bg-transparent px-2 py-1 text-gray-700 outline-none transition-colors hover:border-violet-400 focus:border-violet-700 focus:bg-white" 
+                title="Fecha hasta"
+              />
+              {(filtroAnterioresDesde || filtroAnterioresHasta) && (
+                <button 
+                  type="button" 
+                  onClick={() => { setFiltroAnterioresDesde(""); setFiltroAnterioresHasta(""); }} 
+                  className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-800 transition-colors hover:bg-violet-200 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:ml-1"
+                >
+                  Borrar filtros
+                </button>
+              )}
+            </div>
+          </div>
+
+          {consultasPasadas.length ? <div className="divide-y divide-violet-100 rounded-lg bg-white shadow-sm border border-gray-100 overflow-hidden">
+            {consultasPasadas.map(({ turno, consulta }) => (
+              <article 
+                key={turno.id_turno} 
+                className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 hover:bg-violet-50/50 transition-colors"
+              >
+                <div>
+                  <p className="font-semibold text-violet-950">{turno.mascota?.nombre_mascota}</p>
+                  <p className="text-sm text-gray-600">{fechaLegible(turno.fecha_turno)} · {turno.hora_turno.slice(0, 5)}</p>
+                </div>
+                
+                <button 
+                  type="button"
+                  onClick={() => navigate(`/duenio/turnos/consulta/${consulta.id_consulta}`)}
+                  className="cursor-pointer rounded-full bg-violet-50 px-4 py-1.5 text-sm font-semibold text-violet-800 border border-violet-100 transition-colors hover:bg-violet-800 hover:text-white"
+                >
+                  Ver consulta &rarr;
+                </button>
+              </article>
+            ))}
+          </div> : <p className="rounded-lg bg-white p-5 text-gray-600 shadow-sm border border-gray-100">No hay consultas asociadas en este rango de fechas.</p>}
         </section>
       </section>
     </section>
