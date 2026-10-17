@@ -42,8 +42,7 @@ export default function AdminSidebar() {
           <img 
             src={estudioIcon}
             alt="Estudios" 
-            className="w-6 h-6 lg:w-7 lg:h-7 object-contain" 
-            style={{ filter: "brightness(0) saturate(100%) invert(29%) sepia(50%) saturate(3193%) hue-rotate(256deg) brightness(89%) contrast(92%)" }}
+            className="w-6 h-6 lg:w-7 lg:h-7 object-contain"
           />
           <span className="text-[11px] lg:text-[1.05rem]">Estudios</span>
         </NavLink>

@@ -36,3 +36,22 @@ export const actualizarEstudio = (id: number, data: EstudioForm) =>
 
 export const eliminarEstudio = (id: number) =>
   api<void>(`/estudio/${id}`, { method: "DELETE" });
+
+export interface TurnoAdmin {
+  id_turno: number;
+  fecha_turno: string;
+  hora_turno: string;
+  estado_turno: string;
+  observaciones_turno?: string;
+  mascota?: {
+    id_mascota: number;
+    nombre_mascota: string;
+  };
+  veterinario: {
+    id_persona: number;
+    nombre: string;
+    apellido: string;
+  };
+}
+
+export const obtenerTurnosAdmin = () => api<TurnoAdmin[]>("/turno");
