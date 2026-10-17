@@ -6,12 +6,13 @@ const em = orm.em
 type TurnoCreateData = Pick<Turno, 'fecha_turno' | 'hora_turno' | 'estado_turno' | 'observaciones_turno' | 'mascota' | 'veterinario'>
 
 export class TurnoRepository {
-  findAll() {
-    return em.find(Turno, {}, { populate: ['mascota', 'veterinario'] })
+ findAll() {
+    return em.find(Turno, {}, { populate: ['mascota', 'mascota.duenio', 'veterinario'] 
+    })
   }
 
   findById(id: number) {
-    return em.findOne(Turno, {id_turno: id}, { populate: ['mascota', 'veterinario'] })
+    return em.findOne(Turno, {id_turno: id}, { populate: ['mascota', 'mascota.duenio', 'veterinario'] })
   }
 
   findByVeterinario(idVet: number) {

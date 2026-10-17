@@ -4,6 +4,7 @@ import GestionVeterinarios from "./GestionVeterinarios";
 import GestionTiposVacuna from "./GestionTipoVacunas";
 import InicioAdministrador from "./InicioAdministrador";
 import TurnosAdministrador from "./TurnosAdministrador";
+import TurnoDetalleAdmin from "./TurnoDetalleAdmin";
 import logoVet from "../../assets/logoVet.png";
 import GestionEstudios from "./GestionEstudios";
 
@@ -20,6 +21,9 @@ export default function PanelAdministrador() {
   };
 
   const renderContenido = () => {
+    if (pathname.includes("/administrador/turnos/detalle/")) {
+      return <TurnoDetalleAdmin />;
+    }
     switch (pathname) {
       case "/administrador/veterinarios":
         return <GestionVeterinarios />;
