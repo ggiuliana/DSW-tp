@@ -18,7 +18,6 @@ function PanelVeterinario() {
   return (
     <main className="min-h-screen bg-purple-50 px-5 pb-28 pt-28 lg:pl-72 lg:pr-10 lg:pb-10">
       <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between bg-white px-4 py-2 shadow-md">
-        {/* Lado Izquierdo: Logo */}
         <div className="flex items-center">
           <img 
             src={logoVet} 
@@ -26,8 +25,6 @@ function PanelVeterinario() {
             className="h-12 w-auto rounded-full object-contain md:h-14 lg:h-16" 
           />
         </div>
-
-        {/* Lado Derecho: Botón Cerrar Sesión */}
         <button
           type="button"
           onClick={cerrarSesion}
