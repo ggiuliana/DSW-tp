@@ -13,9 +13,9 @@ export class DatabaseSeeder extends Seeder {
             PermisosSeeder, 
             GrupoPermisoSeeder,
             UsuariosSeeder,
-            MascotasSeeder,
             EstudiosSeeder,
             TiposVacunaSeeder,
+            MascotasSeeder,
             TurnosSeeder]);
     }
 }
