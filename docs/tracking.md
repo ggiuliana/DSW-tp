@@ -4,7 +4,7 @@ Para el seguimiento de tareas, asignación de responsabilidades y tracking de bu
 
 **[Link a los issues del proyecto](https://github.com/ggiuliana/DSW-tp/issues?q=is%3Aissue)**
 
-## 🛠 Metodología de Trabajo
+## Metodología de Trabajo
 
 Hemos organizado los issue con las siguientes etiquetas:
 
@@ -29,5 +29,8 @@ A continuación se listan los Pull Requests (PRs) más significativos realizados
 | Listado de Turnos en el panel de Administrador | ggiuliana | [#3](https://github.com/ggiuliana/DSW-tp/pull/11) | Merged |
 | Solución visual del Header | ggiuliana | [#4](https://github.com/ggiuliana/DSW-tp/pull/13) | Merged |
 |Listado de Turnos en el panel de Dueño|LeonardoCorbella|[#5](https://github.com/ggiuliana/DSW-tp/pull/14) | Merged |
+|Creación de seeders de mascotas, turnos y tipos de vacunas. |nicosquiarzon|[#6](https://github.com/ggiuliana/DSW-tp/pull/17) | Merged |
+|Agregado de vacunas en seeders de mascotas|nicosquarzon|[#8](https://github.com/ggiuliana/DSW-tp/pull/19) | Merged |
+| Agregado detalle del Duenio en listado Turnos de Admin | LeonardoCorbella | [#8](https://github.com/ggiuliana/DSW-tp/pull/20) | Merged |
 
 > *Para ver el historial completo, visitar la sección de [Pull Requests cerrados en GitHub](https://github.com/ggiuliana/DSW-tp/pulls?q=is%3Apr+is%3Aclosed).*

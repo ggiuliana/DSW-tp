@@ -25,7 +25,7 @@ Regularidad:
 |:-|:-|
 |CRUD simple|1. CRUD Veterinario<br>2. CRUD Dueño<br>3. CRUD Tipo Vacuna<br>4. CRUD Estudio|
 |CRUD dependiente|1. CRUD Mascota {depende de} CRUD Dueño<br>2. CRUD Vacuna {depende de} CRUD Tipo Vacuna|
-|Listado<br>+<br>detalle| 1. Listado de historia clínica por mascota => detalle de estudios realizados <br> 2. Listado de turnos otorgados por veterinario en un rango de fechas determinado => detalle de agenda de Veterinario
+|Listado<br>+<br>detalle| 1. Listado de historia clínica por mascota => detalle de consultas con estudios realizados <br> 2. Listado de turnos otorgados por veterinario en un rango de fechas determinado => detalle de dueño de la mascota asignada
 |CUU/Epic|1. Agendar turno <br>2. Registrar resolución de turno junto a los estudios realizados|
 
 

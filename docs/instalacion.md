@@ -3,7 +3,7 @@
 El proyecto está dividido en dos aplicaciones agnósticas: un **Backend** (Node.js + Express + MikroORM) y un **Frontend** (React + Vite + TailwindCSS).
 
 ## Prerrequisitos
-- [Node.js](https://nodejs.org/) (v18 o superior)
+- [Node.js](https://nodejs.org/)
 - Gestor de paquetes: `pnpm` 
 - Docker
 ---
@@ -34,7 +34,7 @@ docker run --name veterinaria-db -v /c/Users/User/docker-volumes/ps8-dsw-h4g:/va
    ```bash
    pnpm tsc
    ```
-4. **Levantar el servidor de backend**
+4. **Levantar backend**
     ```bash
     node dist/app.js
     ```
@@ -55,7 +55,7 @@ Si el servidor levantó correctamente  debería aparecer el siguiente mensaje:
    pnpm install
    ```
 
-3. **Iniciar la aplicación en modo desarrollo:**
+3. **Levantar frontend:**
    ```bash
    pnpm run dev
    ```
@@ -67,4 +67,4 @@ Si la aplicación se inició correctamente debería aparecer el siguiente mensaj
 Una vez ejecutados los seeders en el backend, se puede ingresar con los siguientes usuarios de prueba:
 - **Admin:** Usuario:`admin` / Contraseña: `admin123`
 - **Veterinario:** `vet1` / Contraseña: `vet123`
-- **Dueño:** ` ` / Contraseña: ` `
+- **Dueño:** `duenio1` / Contraseña: `duenio123`

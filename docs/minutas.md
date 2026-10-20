@@ -60,7 +60,7 @@ Registro de las reuniones de sincronización del equipo, decisiones clave de arq
   - Implementación de las CRUDs Permiso y Grupo de Permisos, 
   - Centralización de errores mediante Middleware.
 ---
-### Reunión #6: Desarrollo del Backend
+### Reunión #7: Desarrollo del sistema
 * **Fecha:** Durante el mes de Octubre
 * **Asistentes:** Giuliana, Nicolas, Leonardo
 * **Temas tratados:**
@@ -69,4 +69,4 @@ Registro de las reuniones de sincronización del equipo, decisiones clave de arq
 * **Acciones:**
   - Creación de CRUDs faltantes (Vacuna, Proveedor, Turno, Consulta).
   - Refactorización del Frontend para usar una estructura más limpia.
-  - Implementación de los casos de uso del sistema.
+  - Implementación de los casos de uso y listados del sistema.
