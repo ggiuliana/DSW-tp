@@ -18,32 +18,28 @@ export class TurnosSeeder extends Seeder {
 
 		const turnos = [
 			{
-				fecha_turno: new Date('2026-11-02'),
+				fecha_turno: new Date('2026-10-22'),
 				hora_turno: '09:00:00',
 				estado_turno: 'Pendiente',
-				observaciones_turno: 'Turno disponible para solicitar.',
 				veterinario: veterinario1,
 			},
 			{
-				fecha_turno: new Date('2026-11-02'),
+				fecha_turno: new Date('2026-10-22'),
 				hora_turno: '10:30:00',
 				estado_turno: 'Pendiente',
-				observaciones_turno: 'Control general.',
 				veterinario: veterinario2,
 			},
 			{
-				fecha_turno: new Date('2026-11-03'),
+				fecha_turno: new Date('2026-10-23'),
 				hora_turno: '10:30:00',
 				estado_turno: 'Confirmado',
-				observaciones_turno: 'Consulta de rutina.',
 				mascota: luna,
 				veterinario: veterinario1,
 			},
 			{
-				fecha_turno: new Date('2026-11-04'),
+				fecha_turno: new Date('2026-10-04'),
 				hora_turno: '12:00:00',
 				estado_turno: 'Resuelto',
-				observaciones_turno: 'Seguimiento de tratamiento.',
 				mascota: michi,
 				veterinario: veterinario2,
 			},
@@ -64,7 +60,7 @@ export class TurnosSeeder extends Seeder {
 		await em.flush();
 
 		const turnoConConsulta = await em.findOneOrFail(Turno, {
-			fecha_turno: new Date('2026-11-04'),
+			fecha_turno: new Date('2026-10-04'),
 			hora_turno: '12:00:00',
 			veterinario: veterinario2,
 		});
