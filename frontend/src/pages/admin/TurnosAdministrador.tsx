@@ -83,6 +83,7 @@ export default function TurnosAdministrador() {
           <input 
             type="date" 
             value={fechaDesde} 
+            max={fechaHasta}
             onChange={(e) => setFechaDesde(e.target.value)}
             className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none transition-all text-sm text-gray-700"
           />
@@ -130,7 +131,6 @@ export default function TurnosAdministrador() {
                   <th className="p-4 font-semibold">Paciente</th>
                   <th className="p-4 font-semibold">Veterinario</th>
                   <th className="p-4 font-semibold">Estado</th>
-                  <th className="p-4 font-semibold">Observaciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-violet-50 text-sm">
@@ -163,9 +163,7 @@ export default function TurnosAdministrador() {
                         {turno.estado_turno}
                       </span>
                     </td>
-                    <td className="p-4 text-gray-500 max-w-xs truncate" title={turno.observaciones_turno}>
-                      {turno.observaciones_turno || "-"}
-                    </td>
+                    
                   </tr>
                 ))}
               </tbody>
