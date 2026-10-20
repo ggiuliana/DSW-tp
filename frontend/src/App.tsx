@@ -38,6 +38,7 @@ function App() {
                 <Route path="/administrador/estudios" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
                 <Route path="/administrador/tipos-vacuna" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
                 <Route path="/administrador/turnos" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
+                <Route path="/administrador/turnos/detalle/:id_turno" element={<RutaProtegida rolRequerido="Administrador"><PanelAdministrador /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
     );

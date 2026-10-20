@@ -2,8 +2,10 @@ import { useTurnosAdministrador } from "../../hooks/useTurnosAdmin.ts";
 import type { TurnoAdmin } from "../../services/adminService";
 import type { VeterinarioAdmin } from "../../types/admin";
 import agendaIcon from "../../assets/icons/agenda.png";
+import { useNavigate } from "react-router-dom";
 
 export default function TurnosAdministrador() {
+  const navigate = useNavigate();
   const {
     turnosFiltrados,
     veterinarios,
@@ -139,7 +141,19 @@ export default function TurnosAdministrador() {
                       <div className="text-violet-600 font-medium text-xs mt-0.5">{turno.hora_turno.slice(0, 5)} hs</div>
                     </td>
                     <td className="p-4">
-                      <span className="font-medium text-gray-900">{turno.mascota ? turno.mascota.nombre_mascota : "Sin Asignar"}</span>
+                      {turno.mascota ? (
+                        <div className="flex flex-col items-start gap-1">
+                          <span className="font-medium text-gray-900">{turno.mascota.nombre_mascota}</span>
+                          <button 
+                            onClick={() => navigate(`/administrador/turnos/detalle/${turno.id_turno}`)}
+                            className="text-xs font-semibold text-violet-700 hover:text-violet-900 bg-violet-50 hover:bg-violet-100 px-2 py-0.5 rounded transition-colors"
+                          >
+                            Ver dueño &rarr;
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="font-medium text-gray-400 italic">Sin Asignar</span>
+                      )}
                     </td>
                     <td className="p-4 text-gray-600">
                       Dr/a. {turno.veterinario?.nombre} {turno.veterinario?.apellido}
